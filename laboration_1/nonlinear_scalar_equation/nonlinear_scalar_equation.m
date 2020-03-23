@@ -110,8 +110,12 @@ disp('-------------------------------------------');
 
 disp('Newtons metod har konvergensordning 2, då fixpunktiterationen konvergerar linjärt. Observera fall 1. Fixpunktsiterationen itererar 19 gånger, medan Newton itererar 4 gånger.');
 
+disp('Låt newton_method_iterations = floor(fixed_point_iterations^(1 / (fixed_point_convergence_order * newton_method_convergence_order))).');
+
 fixed_point_iterations = 19
 newton_method_iterations = 4
+
+fixed_point_convergence_order = 1
 
 newton_method_convergence_order = floor(log(fixed_point_iterations) / log(newton_method_iterations))
 

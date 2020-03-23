@@ -113,7 +113,9 @@ disp('Newtons metod har konvergensordning 2, då fixpunktiterationen konvergerar 
 fixed_point_iterations = 19
 newton_method_iterations = 4
 
-newton_method_convergence_order = sqrt(19)
+disp('');
+
+newton_method_convergence_order = floor(log(fixed_point_iterations) / log(newton_method_iterations))
 
 function [convergens, solution] = get_convergens(next_x, xn)
        
