@@ -1,6 +1,6 @@
 % --- LABORATION 1 ---
 % @author Viola Söderlund
-% @version 2020-03-22
+% @version 2020-03-23
 
 % 3. Olinjärt ekvationsystem
 
@@ -17,19 +17,14 @@ f_y = @(y, p_y) (2*(y - p_y));
 G = @(x, p) [ f_x(x(1), p.x) f_y(x(2), p.y) ];
 J = @(x) [ G(x, A); G(x, B) ];
 
-xn = [ 34; 54 ];
+xn = [ 34 54 ];
 diff = [ -Inf, Inf ];
 
 x0 = xn
 
-points_x = xn(1);
-points_y = xn(2);
 while true
-    diff = -F(xn) * inv(J(xn))
+    diff = -F(xn)/J(xn) % J(v)*sn = -F(v), x(n+1) = v + sn
     xn = xn + diff;
-    
-    points_x = [ points_x xn(1) ];
-    points_y = [ points_y xn(2) ];
     
     if length(diff) <= 1
         break
@@ -54,5 +49,4 @@ hold on
     
     plot([ A.x B.x ], [ A.y B.y ], '.');
     plot([ P_1.x, P_2.x ], [ P_1.y, P_2.y ], '.');
-    plot(points_x, points_y, '.');
 hold off

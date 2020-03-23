@@ -12,10 +12,10 @@ Df = @(x) (2*x - 9*cos(3*x + 2));
 
 % a. Ritar graften till funktionen.
 
-range = [-0.8, 0.5];
-fplot(f, range)
 hold on
-fplot(@(x) 0, range)
+    range = [-0.8, 0.5];
+    fplot(f, range)
+    fplot(@(x) 0, range)
 hold off
 
 % b. Undersöker vilka av funktionens rötter som kan bestämmas av
@@ -27,35 +27,27 @@ next_x = @(x) (f(x) / 9 + x);
 Dnext_x = @(x) (Df(x) / 9 + 1);
 
     % Fall 1
-    xn = -0.6;
+    disp('Fall 1');
     
-    disp('Examining function around start guess...');
-    xn
+    xn = -0.6;
+    x0 = xn
     
     [convergens, num_iterations, solution] = get_convergens(next_x, xn);
     
     if convergens
-        disp('--> Fixpunktsiterationen konvergerar mot första nollvärdet x* med givet antal iterationer.');
-        
         get_is_quadratic(Dnext_x, solution);
-    else
-        disp('--> Fixpunktsiterationen divergerar mot första nollvärdet.');
     end
         
-    % Fall 2
-    xn = 0.48;
+    % Fall 2  
+    disp('Fall 2');
     
-    disp('Examining function around start guess...');
-    xn
+    xn = 0.48;
+    xo = xn
     
     [convergens, num_iterations, solution] = get_convergens(next_x, xn);
     
     if convergens
-        disp('--> Fixpunktsiterationen konvergerar mot andra nollvärdet x* med givet antal iterationer.');
-        
         get_is_quadratic(Dnext_x, solution);
-    else
-        disp('--> Fixpunktsiterationen divergerar mot andra nollvärdet.');
     end
     
     disp('--> Correction: Andra nollvärdet är en falsk lösning! Endast första nollvärdet är sann.')
@@ -67,18 +59,22 @@ disp('--- b. Newtons metod ---')
 next_x = @(x) (xn - f(x) / Df(x));
 
     % Fall 1
+    disp('Fall 1');
+    
     xn = -0.73;
     x0 = xn
     
-    [num_iterations, solution] = calculate_solution(next_x, xn, next_x(xn));
+    %[num_iterations, solution] = calculate_solution(next_x, xn, next_x(xn));
     
     disp('--> Fixpunktsiterationen konvergerar mot första nollvärdet x* med givet antal iterationer.');
         
     % Fall 2
+    disp('Fall 2');
+    
     xn = 0.5;
     x0 = xn
     
-    [num_iterations, solution] = calculate_solution(next_x, xn, next_x(xn));
+    %[num_iterations, solution] = calculate_solution(next_x, xn, next_x(xn));
     
     disp('--> Fixpunktsiterationen konvergerar mot andra nollvärdet x* med givet antal iterationer.');
     

@@ -17,13 +17,13 @@ f_y = @(y, p_y) (2*(y - p_y));
 G = @(x, p) [ f_x(x(1), p.x) f_y(x(2), p.y) ];
 J = @(x) [ G(x, A); G(x, B) ];
 
-xn = [ 34; 54 ];
+xn = [ 34 54 ];
 diff = [ -Inf, Inf ];
 
 x0 = xn
 
 while true
-    diff = -F(xn)/J(xn))
+    diff = -F(xn)/J(xn) % J(xn)*sn = -F(xn), x(n+1) = xn + sn
     xn = xn + diff;
     
     if length(diff) <= 1
