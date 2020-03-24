@@ -1,0 +1,20 @@
+Jag tror detta är tanken:
+
+Vi vill lösa Cx = b
+där C är matrisen C (i minidigits.mat)
+b är en kolumn i testdata (dvs representationen av en siffra)
+och x är en linjärkombination (typ koordinatvektor i basen C)
+
+detta måste göras för alla b, alltså vill vi använda LU-faktorisering
+
+För att hitta bästa lösning på x, använder vi minsta-kvadrat-metoden, dvs.:
+
+C^T * C * x^ = C^T * b
+
+C^T * C räknar vi ut en gång, och det är även den som vi sedan LU-faktoriserar
+
+C^T * b måste vi räkna ut för varje b, jag tror inte att det finns något sätt runt det
+
+
+
+Sedan gör man bara det för alla b och sparar x:en i typ en matris där varje kolumn är en x-vektor motsvarande samma b-kolumn i testdata

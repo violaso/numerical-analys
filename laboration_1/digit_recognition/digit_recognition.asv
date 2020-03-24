@@ -1,0 +1,28 @@
+load minidigits.mat
+
+A = C' * C;
+[L, U] = lu(A);
+
+%declaring/initalizing the "output" matrix, etc.
+xs = zeros(50, 1000); %TODO: generalize this.
+nv = zeros(1, 1000);
+%isTwo = 
+
+for i = 1:length(testdata)
+    %I'll do this with lots of vars first, condense it later.
+    b = testdata(:,i);
+    bp = C' * b;
+    bt = L\bp;
+    xhat = U\bt; %xhat should just magically be the best solution
+    xs(:,i) = xhat; %unnecessary line unless you want to look at xs
+    nv(i) = norm(C*xhat - b);
+end
+
+p = mean([mean(nv) min(nv)]);
+
+for i = 1:length(testdata)
+    isTwo = false;
+    if nv(i) < p; isTwo = true; end
+    shouldBeTwo = false;
+    if testdatad(i
+    
