@@ -1,11 +1,11 @@
 % --- LABORATION 1 ---
-% @author Viola Söderlund
+% @author Viola SÃ¶derlund
 % @author Jakob Carlsson
 % @version 2020-03-27
 
-% 1. Olinjär skalär ekvation
+% 1. OlinjÃ¤r skalÃ¤r ekvation
 
-% Problem: Bestäm samtliga rötter till ekvationen:
+% Problem: BestÃ¤m samtliga rÃ¶tter till ekvationen:
 % x^2 - 3sin(3x + 2) - 1 = 0
 
 f = @(x) (x^2 - 3*sin(3*x + 2) - 1);
@@ -14,13 +14,13 @@ Df = @(x) (2*x - 9*cos(3*x + 2));
 % a. Ritar graften till funktionen.
 
 hold on
-    range = [-3, 3];
+    range = [-0.8, 2.1];
     fplot(f, range)
     fplot(@(x) 0, range)
 hold off
 
-% b. Undersöker vilka av funktionens rötter som kan bestämmas av
-%    fixpunktsiterationen next_x(x*) = x*, och beräknar sedan rötterna.
+% b. UndersÃ¶ker vilka av funktionens rÃ¶tter som kan bestÃ¤mmas av
+%    fixpunktsiterationen next_x(x*) = x*, och berÃ¤knar sedan rÃ¶tterna.
 
 disp('------------------------------');
 disp('--- b. Fixpunktiterationer ---');
@@ -95,7 +95,7 @@ Dnext_x = @(x) (Df(x) / 9 + 1);
         end
     end
 
-% c. Beräknar rötterna med Newtons metod.
+% c. BerÃ¤knar rÃ¶tterna med Newtons metod.
 
 disp('------------------------');
 disp('--- b. Newtons metod ---');
@@ -133,7 +133,7 @@ next_x = @(x) (x - f(x) / Df(x));
     
     % Comparison
     
-    disp('Fixpunktsiterationen (b) konvergerade långsammare än Newtons funktion (c), då Newtons metod har en högre konvergensordning.');
+    disp('Fixpunktsiterationen (b) konvergerade lÃ¥ngsammare Ã¤n Newtons funktion (c), dÃ¥ Newtons metod har en hÃ¶gre konvergensordning.');
     
 % d. Beskriver Newtons metods konvergensordning.
 
@@ -141,9 +141,9 @@ disp('-------------------------------------------');
 disp('--- d. Newtons metods konvergensordning ---');
 disp('-------------------------------------------');
 
-disp('Newtons metod har konvergensordning 2, då fixpunktiterationen konvergerar linjärt. Observera fall 1. Fixpunktsiterationen itererar 19 gånger, medan Newton itererar 4 gånger.');
+disp('Newtons metod har konvergensordning 2, dÃ¥ fixpunktiterationen konvergerar linjÃ¤rt. Observera fall 1. Fixpunktsiterationen itererar 19 gÃ¥nger, medan Newton itererar 4 gÃ¥nger.');
 
-disp('Låt newton_method_iterations = floor(fixed_point_iterations^(1 / (fixed_point_convergence_order * newton_method_convergence_order))).');
+disp('LÃ¥t newton_method_iterations = floor(fixed_point_iterations^(1 / (fixed_point_convergence_order * newton_method_convergence_order))).');
 
 fixed_point_iterations = 19
 newton_method_iterations = 4
@@ -158,7 +158,7 @@ function [convergens, solution] = get_convergens(next_x, xn)
     
     xn_incremented = next_x(xn);
         
-    % JAG TROR ATT MAN MÅSTE ÄNDRA DETTA LITE
+    % JAG TROR ATT MAN MÃ…STE Ã„NDRA DETTA LITE
     if abs(xn_incremented) > 1
         disp('Fixpunksiterationen divergerar runt xn = x0 ? x*.');
             
