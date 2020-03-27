@@ -13,7 +13,7 @@ Df = @(x) (2*x - 9*cos(3*x + 2));
 % a. Ritar graften till funktionen.
 
 hold on
-    range = [-0.8, 0.5];
+    range = [-0.8, 2.1];
     fplot(f, range)
     fplot(@(x) 0, range)
 hold off
