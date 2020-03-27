@@ -1,8 +1,12 @@
 % --- LABORATION 1 ---
+<<<<<<< HEAD
 % @author Viola Sˆderlund
+=======
+% @author Viola S√∂derlund
+>>>>>>> 6818011cbbb6d1aaa6fc52319b4f69b9ae6be5e8
 % @version 2020-03-27
 
-% 3. Olinj‰rt ekvationsystem
+% 3. Olinj√§rt ekvationsystem
 
 A = struct('x', 93, 'y', 63, 'r', 55.1);
 B = struct('x', 6, 'y', 16, 'r', 46.2);
@@ -28,11 +32,19 @@ J = @(x) [ G(x, A); G(x, B) ];
     end
 
     P_1 = struct('x', xn(1), 'y', xn(2))
+<<<<<<< HEAD
     
     % Calculate P2
     x0 = [ 51; 21 ]
     xn = calc(x0, J, F);
     
+=======
+    
+    % Calculate P2
+    x0 = [ 51; 21 ]
+    xn = calc(x0, J, F);
+    
+>>>>>>> 6818011cbbb6d1aaa6fc52319b4f69b9ae6be5e8
     if J(xn) ~= [ 0 0; 0 0 ]
         disp('Metoden har en kvadratisk konvergens.');
     else
@@ -69,4 +81,8 @@ function xn = calc(xn, J, F)
             break
         end
     end
+<<<<<<< HEAD
 end
+=======
+end
+>>>>>>> 6818011cbbb6d1aaa6fc52319b4f69b9ae6be5e8
