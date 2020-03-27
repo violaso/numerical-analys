@@ -1,6 +1,7 @@
 % --- LABORATION 1 ---
 % @author Viola Söderlund
-% @version 2020-03-21
+% @author Jakob Carlsson
+% @version 2020-03-27
 
 % 1. Olinjär skalär ekvation
 
@@ -13,7 +14,7 @@ Df = @(x) (2*x - 9*cos(3*x + 2));
 % a. Ritar graften till funktionen.
 
 hold on
-    range = [-0.8, 0.5];
+    range = [-3, 3];
     fplot(f, range)
     fplot(@(x) 0, range)
 hold off
@@ -60,7 +61,39 @@ Dnext_x = @(x) (Df(x) / 9 + 1);
         end
     end
     
-    disp('--> Correction: Andra nollvärdet är en falsk lösning! Endast första nollvärdet är sann.')
+    % Fall 3
+    disp('--- Fall 3 ---');
+    
+    xn = 1.5;
+    x0 = xn
+    
+    %[convergens, solution] = get_convergens(next_x, xn);
+    solution = calculate_solution(next_x, xn, next_x(xn));
+    
+    if convergens
+        if Dnext_x(solution) == 0
+            disp('----> Iterationen konvergerar kvadratiskt.');
+        else 
+            disp('----> Iterationen konvergerar inte kvadratiskt.');
+        end
+    end
+    
+    % Fall 4
+    disp('--- Fall 4 ---');
+    
+    xn = 1.999;
+    x0 = xn
+    
+    %[convergens, solution] = get_convergens(next_x, xn);
+    solution = calculate_solution(next_x, xn, next_x(xn));
+    
+    if convergens
+        if Dnext_x(solution) == 0
+            disp('----> Iterationen konvergerar kvadratiskt.');
+        else 
+            disp('----> Iterationen konvergerar inte kvadratiskt.');
+        end
+    end
 
 % c. Beräknar rötterna med Newtons metod.
 
@@ -125,6 +158,7 @@ function [convergens, solution] = get_convergens(next_x, xn)
     
     xn_incremented = next_x(xn);
         
+    % JAG TROR ATT MAN MÅSTE ÄNDRA DETTA LITE
     if abs(xn_incremented) > 1
         disp('Fixpunksiterationen divergerar runt xn = x0 ? x*.');
             
