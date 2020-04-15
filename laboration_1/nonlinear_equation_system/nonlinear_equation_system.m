@@ -21,6 +21,8 @@ J = @(x) [ G(x, A); G(x, B) ];
     x0 = [ 34; 54 ]
     xn = calc(x0, J, F);
     
+    J(xn)
+    
     if J(xn) ~= [ 0 0; 0 0 ]
         disp('Metoden har en kvadratisk konvergens.');
     else
@@ -32,6 +34,8 @@ J = @(x) [ G(x, A); G(x, B) ];
     % Calculate P2
     x0 = [ 51; 21 ]
     xn = calc(x0, J, F);
+    
+    J(xn)
     
     if J(xn) ~= [ 0 0; 0 0 ]
         disp('Metoden har en kvadratisk konvergens.');
