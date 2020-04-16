@@ -35,7 +35,7 @@ Dnext_x = @(x) (Df(x) / 9 + 1);
     xn = -0.6;
     x0 = xn
     
-    [convergens, solution] = get_convergens(next_x, xn);
+    [convergens, solution] = get_convergens(next_x, xn, Dnext_x);
     
     if convergens
         if Dnext_x(solution) == 0
@@ -51,7 +51,7 @@ Dnext_x = @(x) (Df(x) / 9 + 1);
     xn = 0.48;
     xo = xn
     
-    [convergens, solution] = get_convergens(next_x, xn);
+    [convergens, solution] = get_convergens(next_x, xn, Dnext_x);
     
     if convergens
         if Dnext_x(solution) == 0
@@ -61,14 +61,15 @@ Dnext_x = @(x) (Df(x) / 9 + 1);
         end
     end
     
+    disp('OBS: Fall 2 konvergerar inte mot närliggande nollställe, men mot samma nollställe som Fall 3.');
+    
     % Fall 3
     disp('--- Fall 3 ---');
     
     xn = 1.5;
     x0 = xn
     
-    %[convergens, solution] = get_convergens(next_x, xn);
-    solution = calculate_solution(next_x, xn, next_x(xn));
+    [convergens, solution] = get_convergens(next_x, xn, Dnext_x);
     
     if convergens
         if Dnext_x(solution) == 0
@@ -84,8 +85,7 @@ Dnext_x = @(x) (Df(x) / 9 + 1);
     xn = 1.999;
     x0 = xn
     
-    %[convergens, solution] = get_convergens(next_x, xn);
-    solution = calculate_solution(next_x, xn, next_x(xn));
+    [convergens, solution] = get_convergens(next_x, xn, Dnext_x);
     
     if convergens
         if Dnext_x(solution) == 0
@@ -120,7 +120,7 @@ next_x = @(x) (x - f(x) / Df(x));
     % Fall 2
     disp('--- Fall 2 ---');
     
-    xn = 0.47;
+    xn = 2.1;
     x0 = xn
     
     solution = calculate_solution(next_x, xn, next_x(xn));
@@ -152,18 +152,17 @@ fixed_point_convergence_order = 1
 
 newton_method_convergence_order = floor(log(fixed_point_iterations) / log(newton_method_iterations))
 
-function [convergens, solution] = get_convergens(next_x, xn)
+function [convergens, solution] = get_convergens(next_x, xn, Dnext_x)
        
     % Check convergens
     
-    xn_incremented = next_x(xn);
+    Dxn_incremented = Dnext_x(xn);
         
-    % JAG TROR ATT MAN MÃ…STE Ã„NDRA DETTA LITE
-    if abs(xn_incremented) > 1
+    if abs(Dxn_incremented) > 1
         disp('Fixpunksiterationen divergerar runt xn = x0 ? x*.');
             
         convergens = false;
-    elseif abs(xn_incremented) < 0.1
+    elseif abs(Dxn_incremented) < 0.1
         disp('Fixpunktsiterationen konvergerar snabbt runt xn = x0 ? x*.');
             
         convergens = true;
@@ -179,7 +178,7 @@ function [convergens, solution] = get_convergens(next_x, xn)
     solution = Inf;
         
     if convergens
-        solution = calculate_solution(next_x, xn, xn_incremented);
+        solution = calculate_solution(next_x, xn, next_x(xn));
     end
 end
 
