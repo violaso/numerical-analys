@@ -1,0 +1,8 @@
+uppskattat fel (täljare) med trapets (en minut): 0.961035148040537
+med simpsons (en minut):			 6.39149208596064
+
+
+
+Är det bättre eller sämre att använda Simpson i detta fall?
+
+Det är sämre eftersom man får sämre noggrannhet med samma beräkningstid.

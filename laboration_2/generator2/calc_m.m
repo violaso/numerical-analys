@@ -1,6 +1,8 @@
 % --- LABORATION 2.3 ---
 % @author Jakob Carlsson & Viola Söderlund
-% @version 2020-04-16
+% @version 2020-04-17
+
+clear;
 
 s = 2;
 beta = 1;
@@ -17,8 +19,8 @@ m = @(t) max(generator(theta_bar + t, 0));
 f = @(t) exp(-beta*t^2)*m(t);
 
 % use one of these two following lines:
-enumerator = calc_trapezoid(f, n_tra, -s, s);
-%enumerator = simpson(f, n_tra, -s, s);
+%enumerator = calc_trapezoid(f, n_tra, -s, s);
+enumerator = simpson(f, n_tra, -s, s);
 
 m_bar = enumerator / denominator
 toc % there's a stray tic in generator.m that needs to be commented out for this to work
@@ -26,8 +28,8 @@ toc % there's a stray tic in generator.m that needs to be commented out for this
 % -- uppskatta felet --
 
 % use one of these two following lines:
-enumerator_halfh = calc_trapezoid(f, n_tra*2, -s, s);
-%enumerator_halfh = simpson(f, n_tra*2, -s, s);
+%enumerator_halfh = calc_trapezoid(f, n_tra*2, -s, s);
+enumerator_halfh = simpson(f, n_tra*2, -s, s);
 
 est_error = abs(enumerator_halfh - enumerator)
 
@@ -62,8 +64,8 @@ function value = calc_trapezoid(f, num_intervals, lower_bound, upper_bound)
     value = h * (f(lower_bound)/2 + sum + f(upper_bound)/2);
 end
 
-function sum = n_denominator(s, beta)
-    f = @(t) exp(-beta.*t^2);
-    sum = simpson(f, 10000, -s, s); % second arg is the number of intervals
-    %sum = integral(f, -s, s); % don't use this as is, but probably use this one in the end
+function value = n_denominator(s, beta)
+    f = @(t) exp(-beta*t.^2);
+    %value = simpson(f, 10000, -s, s); % second arg is the number of intervals
+    value = integral(f, -s, s, 'RelTol', eps, 'AbsTol', eps);
 end
