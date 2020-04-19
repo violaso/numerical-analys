@@ -2,9 +2,6 @@
 % @author Viola Söderlund
 % @version 2020-04-14
 
-% ISSUES:
-% - 2.c
-
 % clear
 
 clc;
@@ -88,6 +85,8 @@ disp('Approximationen konvergerar när h -> 0.');
 
 % e) Plottar felet
 
+% Hämtar felet av trapetsapproximationen och Simpsonsapproximationen.
+
 y_T = zeros(1, length(h));
 y_S = y_T;
 for i = 1:length(h)
@@ -95,7 +94,8 @@ for i = 1:length(h)
    y_S(i) = abs(simpson(f, h(i)) - I);
 end
  
-disp('Modellen har ingen konstantterm c, då y -> 0 när h -> 0.');
+% 
+% Modellen har ingen konstantterm c, då y -> 0 när h -> 0.
 
 fit_type = fittype( ...
     'a*x^b', ...
@@ -130,7 +130,7 @@ hold off;
 
 disp('Approximationen visar att metoderna kan beskrivas med:');
 disp('-- Trapets: e(h) = 0.0172 * h^1.9769 = O(h^1.9769) < O(h^2) --> Stämmer med teorin');
-disp('-- Simpsons: e(h) = 1.1536 * h^0.9993 = O(h^0.9993) < O(h)');
+disp('-- Simpsons: e(h) = 1.1536 * h^0.9993 = O(h^0.9993) < O(h)'); % vill ha närmare O(h^4)
 
 % Notis: Eftersom f är fyra gånger deriverbar, borde funktionen ha
 % noggrannhetsordning 4.

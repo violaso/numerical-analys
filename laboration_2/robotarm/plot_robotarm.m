@@ -12,4 +12,5 @@ function plot_robotarm(thetav)
  plot(xv,yv,opts{:});
 axis equal
 axis([-0.1 1.5 -0.1 1.6])
+grid on;
  drawnow;
