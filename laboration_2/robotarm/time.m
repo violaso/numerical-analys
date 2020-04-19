@@ -13,7 +13,7 @@
 % y_n+1 = y_n + hf(t_n, y_n)
 % u_n+1 = u_n + hF(t_n, y_n, D_y_n)
 
-th_ = get_theta(1.3, 1.3);
+th_ = get_theta(1.3, 1.3, false);
 
 h = 0.1;
 
