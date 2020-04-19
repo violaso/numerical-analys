@@ -1,52 +1,55 @@
 % --- LABORATION 2.4bc ---
 % @author Jakob Carlsson & whoever wrote the skeleton...
-% @version 2020-04-18
-
-
-
-% Funktionerna är inte korrekta, man måste sätta ihop dem på korrekt
-% sätt, men jag tror detta är rätt byggstenar. Och man måste definiera u,
-% som är två olika (ish) i F_0 och F_1.
-
-
-% eftersom Matlab börjar på 1 måste vi ha u_1 och u_2
-% första diffekvationen som system av första ordningens
-F_0 = @(t, u) [u(2); -alpha*(u(1) - theta_star) - gamma*u(2) + beta*sin(omega*t)];
-
-% andra diffek
-F_1 = @(t, u) [u(2); -alpha*(u(1)-theta_star) - gamma*(u(2) + abs('FÖRRA u(2)')) + beta*sin(omega*t)];
-
-F = [F_0; F_1]; %ungefär så är tanken, fast med parametrar då...
-
-
-
-% och just det.. theta_star är vinklarna från get_theta
-
-
-
-
-% nu när jag kollar på kommentaren för funktionen så tror jag att jag vet
-% hur man ska ta det jag skrev och faktiskt göra det användbart...
-% Jag har lite fysiska anteckningar också som jag inte vet hur bra de
-% förmedlades här...
-
+% @version 2020-04-19
 
 function f=f_robotarm(z0,t,ts1,ts2,alpha,beta,gamma,omega)
-%% Computes the right-hand side of the robot differential equation
-%
-% * z0 is a vector containing [theta1(t);theta1prime(t);theta2(t);theta2prime(t)]
-% * t is the current time
-% ts1,ts2 is the two wanted angles.
-% 
-% The return value f is the right-hand side of the differential equation
-% (with four variables)
-% 
+    %% Computes the right-hand side of the robot differential equation
+    %
+    % * z0 is a vector containing [theta1(t);theta1prime(t);theta2(t);theta2prime(t)]
+    % * t is the current time
+    % ts1,ts2 is the two wanted angles.
+    % 
+    % The return value f is the right-hand side of the differential equation
+    % (with four variables)
+    % 
+
+    % detta är istället för ts1 och ts2, men ok fair enough, vi kör den och
+    % slänger med dess output här istället...
+    theta_star_eh = get_theta(1.3,1.3);
+    theta_star = theta_star_eh(:,1); % ta bara första kolumnen; detta borde inte vara nödvändigt om man gör rätt men... eh.
+
+    %initialisera f
+    f=zeros(size(z0));
+    % sätt f, dvs systemet
+    f(1)=z0(2);
+    f(2)=-alpha*(z0(1)-theta_star(1) - gamma*z0(2) + beta*sin(omega*t));
+    f(3)=z0(4);
+    f(4)=-alpha*(z0(3)-theta_star(2) - gamma*(z0(4) + abs(z0(2))) + beta*sin(omega*t));
+end
+
+%forwards Euler, and also "animate" it by plotting it every now and then.
+function animate_feuler(f)
+    % räkna ut två vinklar som en funktion av tiden ( = i i en loop)
+    % vi har startvärden, och vi har f från f_robotarm som räknar ut hf
+    % (typ)
 
 
-f=zeros(size(z0));
-f(1)=z0(2);
-f(2)=-alpha*(z0(1)-.... 
-f(3)=z0(4);
-f(4)=-alpha*(z0(3)-.... 
+
+    %direkt från slides:
+    
+end
+
+function feuler(yprim, start, h)
+    % given y' = yprim and y(0) = start, find y (a function)
+    % we do this using forwards Euler with the step length h
+    
+    f  = yprim;
+    y = start;
+    for t=0:h:2-h
+        y = y + h*f(t,y);
+    end
+end
+
+
 
 
