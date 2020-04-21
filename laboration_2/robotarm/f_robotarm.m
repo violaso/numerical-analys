@@ -1,10 +1,10 @@
 % --- LABORATION 2.4bc ---
 % @author Jakob Carlsson & whoever wrote the skeleton...
-% @version 2020-04-19
+% @version 2020-04-21
 
 % this is kind of annoying, but to run you need to do:
 % >> z0 = [pi/2;0;pi/6;0];
-% >> f_robotarm(z0, 2, 0.5, 4, pi*3)
+% >> f_robotarm(z0, 2, 0.5, 4, pi*3);
 
 %I got rid of the parameters: ,t,ts1,ts2
 function f=f_robotarm(z0,alpha,beta,gamma,omega)
@@ -18,10 +18,8 @@ function f=f_robotarm(z0,alpha,beta,gamma,omega)
     % (with four variables)
     % 
 
-    % detta är istället för ts1 och ts2, men ok fair enough, vi kör den och
-    % slänger med dess output här istället...
-    theta_star_eh = get_theta(1.3,1.3, false);
-    theta_star = theta_star_eh(:,1); % ta bara första kolumnen; detta borde inte vara nödvändigt om man gör rätt men... eh.
+    % detta är istället för ts1 och ts2
+    theta_star = get_theta(1.3,1.3, false);
 
     %initialisera f
 %     f=zeros(size(z0));
@@ -36,17 +34,6 @@ function f=f_robotarm(z0,alpha,beta,gamma,omega)
         for i = 1:length(z0) %really we should be calling z0 just z at this point but whatever...
             z0(i) = z0(i) + h*f{i}(t,z0);
         end
-        plot_robotarm([z0(1), z0(3)]); %OK SO, with 1 and 3, this gives the same result as time.m, but from the theory I THINK that it should actually be 2 and 4. But that looks worse so probably I'm wrong.
+        plot_robotarm([z0(1), z0(3)]);
     end
 end
-
-% function feuler(yprim, start, h)
-%     % given y' = yprim and y(0) = start, find y (a function)
-%     % we do this using forwards Euler with the step length h
-%     
-%     f  = yprim;
-%     y = start;
-%     for t=0:h:2-h
-%         y = y + h*f(t,y);
-%     end
-% end
