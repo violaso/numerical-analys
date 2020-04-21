@@ -17,7 +17,7 @@ f_d2 = @(x) -(1 / (4 * (x + 2) * sqrt(x + 2)));
 
 disp('--- A. ---');
 
-figure;
+figure('Name', 'a) Integralen av f i [-1, 1]', 'NumberTitle', 'off');
 fplot(f, [-1 1]);
 
 I = integral(f, -1, 1)
@@ -27,17 +27,18 @@ I = integral(f, -1, 1)
 disp('--- B. ---');
 
 h = [1 0.5 0.25 0.125 0.0625];
+
 results = zeros(length(h), 3);
 
 disp('results: h, T_h, diff.')
 
-S_h = trapezoidal(f, h(1));
-results(1,:) = [ h(1) S_h NaN ];
+T_h = trapezoidal(f, h(1));
+results(1,:) = [ h(1) T_h NaN ];
 
 for i = 2:length(h)
-    old = S_h;
-    S_h = trapezoidal(f, h(i));
-    results(i,:) = [ h(i) S_h (S_h - old) ];
+    old = T_h;
+    T_h = trapezoidal(f, h(i));
+    results(i,:) = [ h(i) T_h (T_h - old) ];
 end
 
 results
@@ -50,7 +51,7 @@ disp('--- C. ---');
 
 results = zeros(length(h), 4);
 
-disp('results: h, T_h, diff., teoretical_limit')
+disp('results: h, err, diff., teoretical_limit')
 
 err = abs(I - trapezoidal(f, h(1)));
 results(1,:) = [ h(1) err NaN error(f_d2, h(1)) ];
@@ -85,6 +86,11 @@ disp('Approximationen konvergerar när h -> 0.');
 
 % e) Plottar felet
 
+% Här använder vi två metoder för att besvara uppgiften för att vara säkra.
+
+% Metod 1: Göra en modellanpassning av felen på exponential form för att
+% hitta noggrannhetsordning, och plotta.
+
 % Hämtar felet av trapetsapproximationen och Simpsonsapproximationen.
 
 y_T = zeros(1, length(h));
@@ -93,8 +99,8 @@ for i = 1:length(h)
    y_T(i) = abs(trapezoidal(f, h(i)) - I);
    y_S(i) = abs(simpson(f, h(i)) - I);
 end
- 
-% 
+
+% Gör modellanpassning.
 % Modellen har ingen konstantterm c, då y -> 0 när h -> 0.
 
 fit_type = fittype( ...
@@ -113,7 +119,9 @@ coefficientValues = coeffvalues(simpson_fitmodel);
 a_S = coefficientValues(1);
 b_S = coefficientValues(2);
 
-figure;
+% Plottar.
+
+figure('Name', 'e) Metod 1: Modellanpassning på exponential form', 'NumberTitle', 'off');
 hold on;
     x = logspace(-2,0);
     
@@ -131,9 +139,40 @@ hold off;
 disp('Approximationen visar att metoderna kan beskrivas med:');
 disp('-- Trapets: e(h) = 0.0172 * h^1.9769 = O(h^1.9769) < O(h^2) --> Stämmer med teorin');
 disp('-- Simpsons: e(h) = 1.1536 * h^0.9993 = O(h^0.9993) < O(h)'); % vill ha närmare O(h^4)
-
 % Notis: Eftersom f är fyra gånger deriverbar, borde funktionen ha
 % noggrannhetsordning 4.
+
+% Metod 2: Följa given teori om noggrannhetsordning enligt föreläsning 9,
+% dvs göra en konvergensplot.
+
+figure('Name', 'e) Metod 2: Enligt teori om noggrannhetsordning', 'NumberTitle', 'off');
+hold on;
+    set(gca, 'XScale', 'log');
+    
+    x = logspace(-2,0);
+    
+    y = zeros(1, length(x));
+    for i_ = 1:length(x)
+        y(i_) = log10(abs(trapezoidal(f, x(i_)) - I));
+    end
+    loglog(x,y);
+    
+    y = zeros(1, length(x));
+    for i_ = 1:length(x)
+        y(i_) = log10(abs(simpson(f, x(i_)) - I));
+    end
+    loglog(x,y);
+    
+    y = log10(x)*2;
+    loglog(x, y);
+    
+    y = log10(x)*4;
+    loglog(x, y);
+    
+    legend('Trapets', 'Simpsons', 'h^2', 'h^4', 'Location', 'southeast')
+    
+    grid on
+hold off;
 
 function app_error = error(f, h)
     f_range = f(-1);
@@ -157,12 +196,17 @@ function sum = trapezoidal(f, h)
 end
 
 function sum = simpson(f, h)
+    n = 2 / h;
+
     odd_sum = 0;
-    even_sum = 0;
-    for x_i = (-1 + h):h*2:(1 - h)
-        odd_sum = odd_sum + f(x_i);
-        even_sum = even_sum + f(x_i + h);
+    for i = 1:2:n-1
+        odd_sum = odd_sum + f(-1 + h*i);
     end
     
-    sum = (f(-1) + 4 * odd_sum + 2 * even_sum + f(1)) * h / 3;
+    even_sum = 0;
+    for i = 2:2:n-2
+        even_sum = even_sum + f(-1 + h*i);
+    end
+    
+    sum = (f(-1) + 4*odd_sum + 2*even_sum + f(1)) * h/3;
 end
