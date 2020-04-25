@@ -11,12 +11,12 @@ C = struct('x', 20, 'y', 83, 'r', 46.2);
 % Gauss-Newton's method
 
 f = @(x, p) ((x(1) - p.x)^2 + (x(2) - p.y)^2 - p.r^2);
-F = @(x) [ f(x, A); f(x, B) ];
+F = @(x) [ f(x, A); f(x, B); f(x, C) ];
 
 f_x = @(x, p_x) (2*(x - p_x));
 f_y = @(y, p_y) (2*(y - p_y));
 G = @(x, p) [ f_x(x(1), p.x) f_y(x(2), p.y) ];
-J = @(x) [ G(x, A); G(x, B) ];
+J = @(x) [ G(x, A); G(x, B); G(x, C) ];
 
     % Calculate P1
     
@@ -37,8 +37,6 @@ J = @(x) [ G(x, A); G(x, B) ];
         xn = calc_n(x0, J, F);
         
         P_1_n = struct('x', xn(1), 'y', xn(2));
-        
-        norm_of_Fxn = norm(F(xn))
     
     % Calculate P2
     
@@ -59,14 +57,10 @@ J = @(x) [ G(x, A); G(x, B) ];
         xn = calc_n(x0, J, F);
 
         P_2_n = struct('x', xn(1), 'y', xn(2));
-        
-        norm_of_Fxn = norm(F(xn))
 
 % Plotting the circles
 
 disp('Figuren bör visa samma svar som i laboration_1: nonlinear_equation_system. Detta för att indatan är detsamma som i nämnd föregående uppgift.');
-
-disp('Gauss-Newtons metod används för att den är en förenklad version av Newtons metod då ||F(x*)|| = 0.');
 
 hold on
     radians = 0:pi/50:2 * pi;

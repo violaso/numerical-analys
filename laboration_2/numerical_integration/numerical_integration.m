@@ -20,7 +20,7 @@ disp('--- A. ---');
 figure('Name', 'a) Integralen av f i [-1, 1]', 'NumberTitle', 'off');
 fplot(f, [-1 1]);
 
-I = integral(f, -1, 1)
+I = 2*sqrt(3) - 2/3;
 
 % b) Approximerar integralen med trapetsregeln.
 
@@ -86,93 +86,63 @@ disp('Approximationen konvergerar när h -> 0.');
 
 % e) Plottar felet
 
-% Här använder vi två metoder för att besvara uppgiften för att vara säkra.
-
-% Metod 1: Göra en modellanpassning av felen på exponential form för att
-% hitta noggrannhetsordning, och plotta.
-
-% Hämtar felet av trapetsapproximationen och Simpsonsapproximationen.
-
-y_T = zeros(1, length(h));
-y_S = y_T;
-for i = 1:length(h)
-   y_T(i) = abs(trapezoidal(f, h(i)) - I);
-   y_S(i) = abs(simpson(f, h(i)) - I);
-end
-
-% Gör modellanpassning.
-% Modellen har ingen konstantterm c, då y -> 0 när h -> 0.
-
-fit_type = fittype( ...
-    'a*x^b', ...
-    'dependent', { 'y' }, ...
-    'independent', { 'x' }, ...
-    'coefficients', { 'a', 'b' });
-
-trapezoidal_fitmodel = fit(h', y_T', fit_type)
-coefficientValues = coeffvalues(trapezoidal_fitmodel);
-a_T = coefficientValues(1);
-b_T = coefficientValues(2);
-
-simpson_fitmodel = fit(h', y_S', fit_type)
-coefficientValues = coeffvalues(simpson_fitmodel);
-a_S = coefficientValues(1);
-b_S = coefficientValues(2);
-
-% Plottar.
-
-figure('Name', 'e) Metod 1: Modellanpassning på exponential form', 'NumberTitle', 'off');
-hold on;
-    x = logspace(-2,0);
+figure('Name', 'e) Verifiera noggrannhetsordning trapetsregeln', 'NumberTitle', 'off');
+    x = logspace(-6,0);
+    y = zeros(1, length(x));
     
-    y = a_T * x.^b_T;
+    for i_ = 1:length(x)
+        y(i_) = abs(trapezoidal(f, x(i_)) - I);
+    end
     loglog(x,y);
     
-    y = a_S * x.^b_S;
+    hold on;
+    
+    for i_ = 1:length(x)
+        y(i_) = abs(trapezoidal(f, x(i_) / 2) - I);
+    end
     loglog(x,y);
     
-    legend('Trapets', 'Simpsons', 'Location', 'northwest')
+    hold on;
+    
+    y = x*2;
+    loglog(x, y);
+    
+    legend('Ch^p', 'C(h/2)^p', 'h^2', 'Location', 'southeast')
+    
+    grid on
+hold off;
+
+figure('Name', 'e) Verifiera noggrannhetsordning Simpsons regel', 'NumberTitle', 'off');
+    x = logspace(-6,0);
+    y = zeros(1, length(x));
+    
+    for i_ = 1:length(x)
+        y(i_) = abs(simpson(f, x(i_)) - I);
+    end
+    loglog(x,y);
+    
+    hold on;
+    
+    for i_ = 1:length(x)
+        y(i_) = abs(simpson(f, x(i_) / 2) - I);
+    end
+    loglog(x,y);
+    
+    hold on;
+    
+    y = x*4;
+    loglog(x, y);
+    
+    legend('Ch^p', 'C(h/2)^p', 'h^4', 'Location', 'southeast')
     
     grid on
 hold off;
 
 disp('Approximationen visar att metoderna kan beskrivas med:');
-disp('-- Trapets: e(h) = 0.0172 * h^1.9769 = O(h^1.9769) < O(h^2) --> Stämmer med teorin');
-disp('-- Simpsons: e(h) = 1.1536 * h^0.9993 = O(h^0.9993) < O(h)'); % vill ha närmare O(h^4)
+disp('-- Trapets: e(h) = O(h^2)');
+disp('-- Simpsons: e(h) = O(h^4)'); 
 % Notis: Eftersom f är fyra gånger deriverbar, borde funktionen ha
 % noggrannhetsordning 4.
-
-% Metod 2: Följa given teori om noggrannhetsordning enligt föreläsning 9,
-% dvs göra en konvergensplot.
-
-figure('Name', 'e) Metod 2: Enligt teori om noggrannhetsordning', 'NumberTitle', 'off');
-hold on;
-    set(gca, 'XScale', 'log');
-    
-    x = logspace(-2,0);
-    
-    y = zeros(1, length(x));
-    for i_ = 1:length(x)
-        y(i_) = log10(abs(trapezoidal(f, x(i_)) - I));
-    end
-    loglog(x,y);
-    
-    y = zeros(1, length(x));
-    for i_ = 1:length(x)
-        y(i_) = log10(abs(simpson(f, x(i_)) - I));
-    end
-    loglog(x,y);
-    
-    y = log10(x)*2;
-    loglog(x, y);
-    
-    y = log10(x)*4;
-    loglog(x, y);
-    
-    legend('Trapets', 'Simpsons', 'h^2', 'h^4', 'Location', 'southeast')
-    
-    grid on
-hold off;
 
 function app_error = error(f, h)
     f_range = f(-1);

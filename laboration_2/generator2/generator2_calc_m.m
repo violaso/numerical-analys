@@ -33,23 +33,24 @@ enumerator_halfh = simpson(f, n_tra*2, -s, s);
 
 est_error = abs(enumerator_halfh - enumerator)
 
-
-
-
 % Jag copy-pasteade denna från
 % numerical_integration\numerical_integration.m
 % och modifierade lite
 
 function sum = simpson(f, num_intervals, lower_bound, upper_bound)
     h = (upper_bound - lower_bound) / num_intervals;
+    
     odd_sum = 0;
-    even_sum = 0;
-    for x_i = (lower_bound + h):h*2:(upper_bound - h)
-        odd_sum = odd_sum + f(x_i);
-        even_sum = even_sum + f(x_i + h);
+    for i = 1:2:num_intervals-1
+        odd_sum = odd_sum + f(lower_bound + h*i);
     end
     
-    sum = (f(lower_bound) + 4 * odd_sum + 2 * even_sum + f(upper_bound)) * h / 3;
+    even_sum = 0;
+    for i = 2:2:num_intervals-2
+        even_sum = even_sum + f(lower_bound + h*i);
+    end
+    
+    sum = (f(lower_bound) + 4*odd_sum + 2*even_sum + f(upper_bound)) * h/3;
 end
 
 % denna är också i princip en modifikation av den kopierade koden
