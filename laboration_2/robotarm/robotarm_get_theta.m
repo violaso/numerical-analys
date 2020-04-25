@@ -2,9 +2,7 @@
 % @author Jakob Carlsson
 % @version 2020-04-21
 
-get_theta(1.3, 1.3)
-
-function theta = get_theta(x_e, y_e, doPlot)
+function theta = robotarm_get_theta(x_e, y_e, doPlot)
     % we will have x_e = y_e = 1.3
 
     % hardcode the things we need for Newton

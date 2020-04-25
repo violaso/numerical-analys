@@ -13,7 +13,7 @@
 % y_n+1 = y_n + hf(t_n, y_n)
 % u_n+1 = u_n + hF(t_n, y_n, D_y_n)
 
-th_ = get_theta(1.3, 1.3, false);
+th_ = robotarm_get_theta(1.3, 1.3, false);
 
 h = 0.1;
 
@@ -32,6 +32,8 @@ D_u_2 = @(t, u, D_th_1) F_2(t, u(1), u(2), D_th_1);
 th0 = pi / 6;
 D_th0 = 0;
 u_2 = [th0; D_th0];
+
+figure('Name', 'Robotarm', 'NumberTitle', 'off');
 
 for t=0:h:15
     u_2 = u_2 + h*D_u_2(t, u_2, u_1(2))

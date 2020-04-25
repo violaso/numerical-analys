@@ -1,6 +1,6 @@
 % --- LABORATION 2 ---
-% @author Viola Söderlund
-% @version 2020-04-14
+% @author Jakob Carlsson & Viola Söderlund
+% @version 2020-04-25
 
 % clear
 
@@ -86,56 +86,22 @@ disp('Approximationen konvergerar när h -> 0.');
 
 % e) Plottar felet
 
-figure('Name', 'e) Verifiera noggrannhetsordning trapetsregeln', 'NumberTitle', 'off');
-    x = logspace(-6,0);
-    y = zeros(1, length(x));
-    
-    for i_ = 1:length(x)
-        y(i_) = abs(trapezoidal(f, x(i_)) - I);
-    end
-    loglog(x,y);
-    
-    hold on;
-    
-    for i_ = 1:length(x)
-        y(i_) = abs(trapezoidal(f, x(i_) / 2) - I);
-    end
-    loglog(x,y);
-    
-    hold on;
-    
-    y = x*2;
-    loglog(x, y);
-    
-    legend('Ch^p', 'C(h/2)^p', 'h^2', 'Location', 'southeast')
-    
-    grid on
-hold off;
+y_t = zeros(1,length(h));
+y_s = y_t;
+for i = 1:length(h) 
+    y_t(i) = abs(trapezoidal(f, h(i)) - I);
+    y_s(i) = abs(simpson(f, h(i)) - I);
+end
 
-figure('Name', 'e) Verifiera noggrannhetsordning Simpsons regel', 'NumberTitle', 'off');
-    x = logspace(-6,0);
-    y = zeros(1, length(x));
+figure('Name', 'e) Verifiera noggrannhetsordning', 'NumberTitle', 'off');
+loglog(h, y_t, '-s');
+hold on;
+    loglog(h, y_s, '-s');
+    loglog(h, h.^2, '-o');
+    loglog(h, h.^4, '-o');
     
-    for i_ = 1:length(x)
-        y(i_) = abs(simpson(f, x(i_)) - I);
-    end
-    loglog(x,y);
-    
-    hold on;
-    
-    for i_ = 1:length(x)
-        y(i_) = abs(simpson(f, x(i_) / 2) - I);
-    end
-    loglog(x,y);
-    
-    hold on;
-    
-    y = x*4;
-    loglog(x, y);
-    
-    legend('Ch^p', 'C(h/2)^p', 'h^4', 'Location', 'southeast')
-    
-    grid on
+    legend('Trapets', 'Simpsons', 'h^2', 'h^4', 'Location', 'southeast');
+    grid on;
 hold off;
 
 disp('Approximationen visar att metoderna kan beskrivas med:');

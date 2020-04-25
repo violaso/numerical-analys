@@ -1,6 +1,6 @@
 % --- LABORATION 2 ---
 % @author Viola Söderlund
-% @version 2020-04-10
+% @version 2020-04-24
 
 % 3. Olinjär modellanpassning
 
