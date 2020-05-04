@@ -1,0 +1,33 @@
+% --- PROJEKT KRETSEN ---
+% @author Jakob Carlsson
+% @version 2020-05-04
+
+vi har givet:
+I' = U/L
+U' = -I/C
+
+derivera första, byt ut mot andra, skriv om:
+I'' = U'/L
+I'' = (-I/C)/L
+I'' = (-L/C) * I = f(t, I) (eller f(t, I, I') I guess, men I' = 0 eller nåt sånt)
+
+because I'm dumb it took me way too long to figure this out:
+what we have is that the second derivative is negative whenever the function value is positive, and vice versa
+so in other words, the function curve starts to bend downwards whenever the value is positive and vice versa
+so it's going to be periodic, which is what we want.
+amazing.
+
+So let's put some numbers in I guess?
+
+I'' = -1400000 * I;
+
+right, so if I is something with sin, you derive it once, you get cos, 
+you derive it again, you get -sin, which is sort of what we want.
+
+ok, so it's...
+
+I = sin(sqrt(L/C)*t)
+
+because that gives us:
+I' = sqrt(L/C) * cos(sqrt(L/C) * t)
+I'' = L/C * -sin(sqrt(L/C) * t)
