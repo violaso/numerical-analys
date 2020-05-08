@@ -1,0 +1,15 @@
+% --- PROJEKT KRETSEN ---
+% @author Jakob Carlsson
+% @version 2020-05-08
+
+We have
+E(t) = ½*CU(t)^2 + ½L_0*I_0^2*ln(I_0^2 + I(t)^2)
+
+which gives:
+E'(t) = CU'(t) + (L_0*I(t)*I'(t))/(I_0^2 + I(t)^2) % kvotregeln bl.a.
+
+= -I(t) + L(t)I(t)I'(t) % sätt in enligt (2) och (3)
+= -I(t) + U(t)I(t)      % och enligt (1)
+= I(t)*(U(t) - 1)       % bryt ut
+
+and this should = 0 if E is constant.
