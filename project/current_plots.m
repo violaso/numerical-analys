@@ -49,7 +49,7 @@ L = L0;
 p = 2*pi / sqrt(1/(C*L))
 fq = 1 / p
 
-% --- TEST CURRENT GRAPTHS ---
+% --- CURRENT GRAPTHS ---
 
 % Defining I(t) as y' = f(t, y).
 
@@ -75,6 +75,11 @@ fq = 1 / p
 
 h = 0.1;
 x = 0+h:h:2*p;
+
+L = @(I) L0 * I0^2/(I0^2+I^2);
+p = @(I) 2*pi / sqrt(1/(C*L(I)));
+
+% FIXME: Use L(t)???
     
 plot([0 x], runge_kutta(220, p, L0, x, h));
 hold on;
@@ -87,7 +92,7 @@ legend('220 V', '1500 V', '2300 V', 'Location', 'northeast');
 function y = runge_kutta(U0, p, L0, x, h)
     In = 0;
 
-    f = @(t, I) 2*pi/p * (I*cos(pi/2) + U0/(L0*2*pi*p)*cos(2*pi/p*t)*sin(pi/2));
+    f = @(t, I) 2*pi/p(I) * (I*cos(pi/2) + U0/(L0*2*pi*p(I))*cos(2*pi/p(I)*t)*sin(pi/2));
     
     y = In;
 
@@ -100,5 +105,7 @@ function y = runge_kutta(U0, p, L0, x, h)
         In = In + h/6*(s1 + 2*s2 + 2*s3 + s4);
 
         y = [y; In];
+        
+        p(In)
     end
 end
