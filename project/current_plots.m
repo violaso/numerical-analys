@@ -1,6 +1,6 @@
 % --- PROJEKT KRETSEN ---
 % @author Viola Söderlund
-% @version 2020-05-10
+% @version 2020-05-11
 
 % --- CONSTANTS ---
 
@@ -19,8 +19,18 @@ C = 0.5 * 10^6;
 
 % --- RELATIONSHIPS ---
 
-% U(t) = L(t) * I'(t)
-% I(t) = -(C * U'(t))
+% The relationships given by the project instructions,
+% U(t) = L(I) * I'(t)
+% I(t) = -C * U'(t)
+% - diverge.
+
+% By switching -C and L, the relationsships are balanced.
+% Since the new relationships fits with the described results of the
+% instructions, these are used instead.
+% U(t) = -C * I'(t)
+% I(t) = L(I) * U'(t)
+
+% L(I) = L0 * I0^2/(I0^2+I^2) = 0.7 * 1/(1+I^2) <= 0.7
 
 % --- ASSESS OSCILLATING PERIOD ---
 
@@ -36,8 +46,8 @@ C = 0.5 * 10^6;
 % => I''(t) = -A*B^2*sin(B*t + C)
 
 % Given the relationships,
-% U = L*I' <=> U' = L*I''
-% I = -(C*U') <=> I = -(C*L*I'') <=> 1/(-C*L) * I = I''
+% U = -C*I' <=> U' = -C*I''
+% I = L*U' <=> I = -(L*C*I'') <=> 1/(-C*L) * I = I''
 
 % => 1/(-C*L) * A*sin(B*x + C) = -A*B^2*sin(B*t + C)
 % <=> -B^2 = 1/(-C*L)
@@ -54,70 +64,63 @@ P = p;
 
 % --- CURRENT GRAPTHS ---
 
-% Defining I(t) as y' = f(t, y).
-
-% Assuming that the phase shift is constant, since I = 0 when t = 0,
-% I(t) = A*sin(2*pi/P*t + C)
-% <=> C = 0
-
-% => I'(t) = A*2*pi/p*cos(2*pi/p*t)
-
-% Assuming that the amplitude is constant, and since L = L0 when t = 0,
-% U0 = L0*I'(0) = L0*A*2*pi/P*cos(0) = L0*A*2*pi/P
-% <=> A = U0/(L0*2*pi/P)
-
-% => I(t) = U0/(L0*2*pi/P) * sin(2*pi/p*t)
-% => I'(t) = U0/(L0*2*pi/P) * 2*pi/p*cos(2*pi/p*t)
-%          = { sin(x + pi/2) = cos(x) }
-%          = 2*pi/p * I(t + p/4)
-%          = 2*pi/p * U0/(L0*2*pi/P) * sin(2*pi/p*t + pi/2)
-%          = { sin(a + b) = sin(a)*cos(b) + cos(a)*sin(b) }
-%          = 2*pi/p * U0/(L0*2*pi/P) * (sin(2*pi/p*t)*cos(pi/2) + cos(2*pi/p*t)*sin(pi/2))
-%          = 2*pi/p * (I(t)*cos(pi/2) + U0/(L0*2*pi/P) * cos(2*pi/p*t)*sin(pi/2))
-%          = 2*pi/p * U0/(L0*2*pi/P) * cos(2*pi/p*t)
-%          = U0*P/(L0*p) * cos(2*pi/p*t)
-%          = f(t, I(t))
-
-disp('I(t) = A * sin(B*t), where')
-A = U0/(L0*2*pi/P)
-B = 2*pi/p
+% Defining y' = F(t, y) where
+% y(t) = [U(t); I(t)]
+%      = [L(I) * I'(t); -(C * U'(t))]
+% => y'(t) = [U'(t); I'(t)]
+%          = [I(t)/(-C); U(t)/L(I)]
+%          = F(t, y)
 
 % Runge-Kutta:
 
-h = 0.1;
-
 L = @(I) L0 * I0^2/(I0^2+I^2);
-p = @(I) 2*pi / sqrt(1/(C*L(I)));
+F = @(t, y) [y(2)/(-C) y(1)/L(y(1))];% = [I'(t); U'(t);]
 
-f = @(t, I, U0) U0*P/(L0*p(I)) * cos(2*pi/p(I)*t);
-f = @(t, I, U0) U0*P/(L0) * cos(2*pi/p(I)*t);
-
-runge_kutta(h, f, 220, P, p, L0);
+[x, y] = runge_kutta(F, 220);
 hold on;
-%runge_kutta(h, f, 1500, P);
+[x, y] = runge_kutta(F, 1500);
 hold on;
-%runge_kutta(h, f, 2300, P);
+[x, y] = runge_kutta(F, 2300);
 
-legend('220 V', '1500 V', '2300 V', 'Location', 'southwest');
+legend('220 V', '1500 V', '2300 V', 'Location', 'northeast');
 
-function runge_kutta(h, f, U0, P, p, L0)
-    In = 0;
-    y = In;
+% --- INTERPOLATION ---
+
+function [Imax, T] = interpolate(x, y)
+    % Piecewise linear interpolation
+end
+
+function [x, y] = runge_kutta(F, U0)
+    I0 = 0;
+    yn = [I0 U0];
+    y = yn;
     
-    x = 0;
-    tn = x;
+    h = 0.1;
+    tn = 0;
+    x = tn; 
+    
+    counter = 1;
 
-    for tn = 0:h:P
-        s1 = f(tn, In, U0);
-        s2 = f(tn + h/2, In + h/2*s1, U0);
-        s3 = f(tn + h/2, In + h/2*s2, U0);
-        s4 = f(tn + h, In + h*s3, U0);
+    while counter < 5
+        s1 = F(tn, yn);
+        s2 = F(tn + h/2, yn + h/2*s1);
+        s3 = F(tn + h/2, yn + h/2*s2);
+        s4 = F(tn + h, yn + h*s3);
 
-        In = In + h/6*(s1 + 2*s2 + 2*s3 + s4);
+        old = yn(1);
+        yn = yn + h/6*(s1 + 2*s2 + 2*s3 + s4);
         
-        x = [x; tn];
-        y = [y; In];
+        if (old < 0 && yn(1) > 0) || (old > 0 && yn(1) < 0) || yn(1) == 0
+           counter = counter + 1; 
+        else 
+            y = [y; yn];
+        
+            tn = tn + h;
+            x = [x; tn];
+        end
     end
+    
+    y = y(:, 1);
     
     plot(x, y);
     hold on;
