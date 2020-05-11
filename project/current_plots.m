@@ -74,38 +74,52 @@ fq = 1 / p
 % Runge-Kutta:
 
 h = 0.1;
-x = 0+h:h:2*p;
 
 L = @(I) L0 * I0^2/(I0^2+I^2);
 p = @(I) 2*pi / sqrt(1/(C*L(I)));
 
-% FIXME: Use L(t)???
-    
-plot([0 x], runge_kutta(220, p, L0, x, h));
+f = @(t, I, U0) 2*pi/p(I) * (I*cos(pi/2) + U0/(L(I)*2*pi*p(I))*cos(2*pi/p(I)*t)*sin(pi/2));
+
+runge_kutta(h, f, 220);
 hold on;
-plot([0 x], runge_kutta(1500, p, L0, x, h));
+runge_kutta(h, f, 1500);
 hold on;
-plot([0 x], runge_kutta(2300, p, L0, x, h));
+runge_kutta(h, f, 2300);
 
 legend('220 V', '1500 V', '2300 V', 'Location', 'northeast');
 
-function y = runge_kutta(U0, p, L0, x, h)
+function runge_kutta(h, f, U0)
     In = 0;
-
-    f = @(t, I) 2*pi/p(I) * (I*cos(pi/2) + U0/(L0*2*pi*p(I))*cos(2*pi/p(I)*t)*sin(pi/2));
-    
     y = In;
+    
+    x = 0;
+    tn = x;
+    
+    period_count = 1; % counts number of intersections with x-axis
 
-    for tn = x
-        s1 = f(tn, In);
-        s2 = f(tn + h/2, In + h/2*s1);
-        s3 = f(tn + h/2, In + h/2*s2);
-        s4 = f(tn + h, In + h*s3);
+    while true
+        s1 = f(tn, In, U0);
+        s2 = f(tn + h/2, In + h/2*s1, U0);
+        s3 = f(tn + h/2, In + h/2*s2, U0);
+        s4 = f(tn + h, In + h*s3, U0);
 
+        old = In;
         In = In + h/6*(s1 + 2*s2 + 2*s3 + s4);
-
-        y = [y; In];
         
-        p(In)
+        if (old < 0 && In > 0) || (old > 0 && In < 0) || In == 0
+            if period_count + 1 == 5
+               break; 
+            else
+               period_count = period_count + 1;
+            end
+        end
+        
+        tn = tn + h;
+        x = [x; tn];
+        y = [y; In];
     end
+    
+    plot(x, y);
+    hold on;
+    plot(x, zeros(1, length(x)), '--', 'HandleVisibility', 'off'); % x-axis
 end
