@@ -53,13 +53,13 @@ fq = 1 / p
 
 % Defining I(t) as y' = f(t, y).
 
-% Since I = 0 when t = 0,
+% Assuming that the phase shift is constant, since I = 0 when t = 0,
 % I(t) = A*sin(2*pi/p*t + C)
 % <=> C = 0
 
 % => I'(t) = A*2*pi/p*cos(2*pi/p*t)
 
-% Since L = L0 when t = 0,
+% Assuming that the amplitude is constant, and since L = L0 when t = 0,
 % U0 = L0*I'(0) = L0*A*2*pi/p*cos(0) = L0*A*2*pi/2
 % <=> A = U0/(L0*2*pi/p)
 
@@ -75,10 +75,12 @@ fq = 1 / p
 
 h = 0.1;
 
+P = p;
+
 L = @(I) L0 * I0^2/(I0^2+I^2);
 p = @(I) 2*pi / sqrt(1/(C*L(I)));
 
-f = @(t, I, U0) 2*pi/p(I) * (I*cos(pi/2) + U0/(L(I)*2*pi*p(I))*cos(2*pi/p(I)*t)*sin(pi/2));
+f = @(t, I, U0) 2*pi/p(I) * (I*cos(pi/2) + U0/(L0*2*pi*P)*cos(2*pi/p(I)*t)*sin(pi/2));
 
 runge_kutta(h, f, 220);
 hold on;
