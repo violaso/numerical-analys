@@ -61,10 +61,3 @@ toc
 % maybe just plot I
 plot(lo:h:hi, results(:,1), '-x'); % bra att komma ihåg att detta är linjär interpolation (fast typ bara grafiskt?)
 
-
-
-% --- show that E(t) is constant by taking the derivative ---
-e_p = results(:,1).*(results(:,2) - 1)
-% of course it doesn't work properly because the functions are wrong, but
-% it does work for a while so there's something.
-% E-math.txt shows my work here.
