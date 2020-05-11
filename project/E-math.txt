@@ -1,0 +1,28 @@
+% --- PROJEKT KRETSEN ---
+% @author Jakob Carlsson
+% @version 2020-05-08
+
+We have
+E(t) = (1/2)*CU(t)^2 + (1/2)L_0*I_0^2*ln(I_0^2 + I(t)^2)
+
+and also:
+LI'(t) = U(t)
+CU'(t) = -I(t)
+L(I(t)) = L_0 * I_0^2 / (I_0^2 + I(t)^2)
+
+the calculations are much easier to see in LaTeX:
+
+E'(t) \\ = \\
+C*U(t)*U'(t) \\
++ \\
+\frac{1}{2}*L_0*I_0^2 * \frac{I(t)I'(t)}{I_0^2 + I(t)^2} \\
+= \\
+C*U(t)*U'(t) \\
++ \\
+\frac{L_0*I_0^2}{I_0^2 + I(t)^2}*I(t)I'(t) \\
+= \\
+C*U(t)*U'(t) + L(I(t)) * I(t)I'(t) \\
+= \\
+-I(t)U(t) + U(t)I(t) = 0 \blacksquare
+
+(I guess you technically also have to say that E'(t) = 0 => E(t) constant for it to be a proper proof)
