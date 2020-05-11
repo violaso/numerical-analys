@@ -49,74 +49,72 @@ L = L0;
 p = 2*pi / sqrt(1/(C*L))
 fq = 1 / p
 
+% When L = L0 or t = 0,
+P = p;
+
 % --- CURRENT GRAPTHS ---
 
 % Defining I(t) as y' = f(t, y).
 
 % Assuming that the phase shift is constant, since I = 0 when t = 0,
-% I(t) = A*sin(2*pi/p*t + C)
+% I(t) = A*sin(2*pi/P*t + C)
 % <=> C = 0
 
 % => I'(t) = A*2*pi/p*cos(2*pi/p*t)
 
 % Assuming that the amplitude is constant, and since L = L0 when t = 0,
-% U0 = L0*I'(0) = L0*A*2*pi/p*cos(0) = L0*A*2*pi/2
-% <=> A = U0/(L0*2*pi/p)
+% U0 = L0*I'(0) = L0*A*2*pi/P*cos(0) = L0*A*2*pi/P
+% <=> A = U0/(L0*2*pi/P)
 
-% => I(t) = U0/(L0*2*pi/p) * sin(2*pi/p*t)
-% => I'(t) = U0/(L0*2*pi/p) * 2*pi/p*cos(2*pi/p*t)
+% => I(t) = U0/(L0*2*pi/P) * sin(2*pi/p*t)
+% => I'(t) = U0/(L0*2*pi/P) * 2*pi/p*cos(2*pi/p*t)
 %          = { sin(x + pi/2) = cos(x) }
 %          = 2*pi/p * I(t + p/4)
-%          = 2*pi/p * U0/(L0*2*pi/p) * sin(2*pi/p*t + pi/2)
+%          = 2*pi/p * U0/(L0*2*pi/P) * sin(2*pi/p*t + pi/2)
 %          = { sin(a + b) = sin(a)*cos(b) + cos(a)*sin(b) }
-%          = 2*pi/p * U0/(L0*2*pi/p) * (I(t)*cos(pi/2) + U0/(L0*2*pi*p)*cos(2*pi/p*t)*sin(pi/2))
+%          = 2*pi/p * U0/(L0*2*pi/P) * (sin(2*pi/p*t)*cos(pi/2) + cos(2*pi/p*t)*sin(pi/2))
+%          = 2*pi/p * (I(t)*cos(pi/2) + U0/(L0*2*pi/P) * cos(2*pi/p*t)*sin(pi/2))
+%          = 2*pi/p * U0/(L0*2*pi/P) * cos(2*pi/p*t)
+%          = U0*P/(L0*p) * cos(2*pi/p*t)
+%          = f(t, I(t))
+
+disp('I(t) = A * sin(B*t), where')
+A = U0/(L0*2*pi/P)
+B = 2*pi/p
 
 % Runge-Kutta:
 
 h = 0.1;
 
-P = p;
-
 L = @(I) L0 * I0^2/(I0^2+I^2);
 p = @(I) 2*pi / sqrt(1/(C*L(I)));
 
-f = @(t, I, U0) 2*pi/p(I) * (I*cos(pi/2) + U0/(L0*2*pi*P)*cos(2*pi/p(I)*t)*sin(pi/2));
+f = @(t, I, U0) U0*P/(L0*p(I)) * cos(2*pi/p(I)*t);
+f = @(t, I, U0) U0*P/(L0) * cos(2*pi/p(I)*t);
 
-runge_kutta(h, f, 220);
+runge_kutta(h, f, 220, P, p, L0);
 hold on;
-runge_kutta(h, f, 1500);
+%runge_kutta(h, f, 1500, P);
 hold on;
-runge_kutta(h, f, 2300);
+%runge_kutta(h, f, 2300, P);
 
-legend('220 V', '1500 V', '2300 V', 'Location', 'northeast');
+legend('220 V', '1500 V', '2300 V', 'Location', 'southwest');
 
-function runge_kutta(h, f, U0)
+function runge_kutta(h, f, U0, P, p, L0)
     In = 0;
     y = In;
     
     x = 0;
     tn = x;
-    
-    period_count = 1; % counts number of intersections with x-axis
 
-    while true
+    for tn = 0:h:P
         s1 = f(tn, In, U0);
         s2 = f(tn + h/2, In + h/2*s1, U0);
         s3 = f(tn + h/2, In + h/2*s2, U0);
         s4 = f(tn + h, In + h*s3, U0);
 
-        old = In;
         In = In + h/6*(s1 + 2*s2 + 2*s3 + s4);
         
-        if (old < 0 && In > 0) || (old > 0 && In < 0) || In == 0
-            if period_count + 1 == 5
-               break; 
-            else
-               period_count = period_count + 1;
-            end
-        end
-        
-        tn = tn + h;
         x = [x; tn];
         y = [y; In];
     end
