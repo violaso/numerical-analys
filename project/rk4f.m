@@ -2,19 +2,31 @@
 % @author Viola Söderlund & Jakob Carlsson
 % @version 2020-05-12
 
-%[x, I, U] = rk4f(F, 220, 2, 0.1);
+%load constants.mat;
+
+% --- TEST ---
+
+% L = @(I) L0 * I0^2/(I0^2+I^2);
+% F = @(t, y) [y(2)/L(y(1)) y(1)/(-C)];% = [I'(t); U'(t);] 
+% 
+% [x, I, U] = rk4f(F, 220, 2, 0.0001);
+% 
+% plot(x, I);
+% hold on;
+% plot(x, zeros(1, length(x)), '--', 'HandleVisibility', 'off'); % x-axis
 
 function [x, I, U] = rk4f(F, U0, p, h)
-%RK4F Solve a system of ODEs using Runge-Kutta 4
+%   RK4F Solve a system of ODEs using Runge-Kutta 4
 %   inputs:
-%   F is a function handle with [t, [y(n)]] -> [y'(n)]
-%   U0 is the starting value for U, which in this case is what can vary
-%   p is the number of periods to calculate
-%   h is the step length
+%   - F is a function handle with [t, [y(n)]] -> [y'(n)]
+%   - U0 is the starting value for U, which in this case is what can vary
+%   - p is the number of periods to calculate
+%   - h is the step length
 %   outputs:
-%   x is the x-values of the points we calculated
-%   I is the y-value of the points in the function I
-%   U is the y-value of the points in the function U
+%   - x is the x-values of the points we calculated
+%   - I is the y-value of the points in the function I
+%   - U is the y-value of the points in the function U
+    
     I0 = 0;
     yn = [I0 U0];
     y = yn;
