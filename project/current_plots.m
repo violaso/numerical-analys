@@ -66,9 +66,9 @@ P = p;
 
 % Defining y' = F(t, y) where
 % y(t) = [U(t); I(t)]
-%      = [L(I) * I'(t); -(C * U'(t))]
-% => y'(t) = [U'(t); I'(t)]
-%          = [I(t)/(-C); U(t)/L(I)]
+%      = [-C * I'(t); L(I) * U'(t)]
+% => y'(t) = [I'(t); U'(t)]
+%          = [U(t)/(-C); I(t)/L(I)]
 %          = F(t, y)
 
 % Runge-Kutta:
@@ -76,20 +76,45 @@ P = p;
 L = @(I) L0 * I0^2/(I0^2+I^2);
 F = @(t, y) [y(2)/(-C) y(1)/L(y(1))];% = [I'(t); U'(t);]
 
-[x, y] = runge_kutta(F, 220);
+[x220, y220] = runge_kutta(F, 220);
 hold on;
-[x, y] = runge_kutta(F, 1500);
+[x1500, y1500] = runge_kutta(F, 1500);
 hold on;
-[x, y] = runge_kutta(F, 2300);
+[x2300, y2300] = runge_kutta(F, 2300);
 
 legend('220 V', '1500 V', '2300 V', 'Location', 'northeast');
 
 % --- INTERPOLATION ---
 
+disp('For U0 = 220:');
+[Imax, T] = interpolate(x220, y220)
+disp('For U0 = 1500:');
+[Imax, T] = interpolate(x1500, y1500)
+disp('For U0 = 2300:');
+[Imax, T] = interpolate(x2300, y2300)
+
+% Piecewise linear interpolation
+% - Returns Imax and period T given points from runge_kutta.
 function [Imax, T] = interpolate(x, y)
-    % Piecewise linear interpolation
+    T = 0;
+   
+    for i = 1:length(x)-1
+        k = (x(i) - x(i + 1)) / (y(i) - y(i + 1));
+        
+        if T == 0 && y(i) < 0 && y(i + 1) > 0
+            x_ = (0 - y(i)) / k + x(i); % point-slope form
+            
+            T = 2*x_;
+        elseif T ~= 0 && k < 0
+            Imax = y(i);
+            
+            break;
+        end
+    end
 end
 
+% Runge-Kutta 4
+% - Plots two periods of given ODE system and voltage.
 function [x, y] = runge_kutta(F, U0)
     I0 = 0;
     yn = [I0 U0];
