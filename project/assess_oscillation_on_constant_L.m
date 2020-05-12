@@ -18,8 +18,8 @@ load constants.mat;
 % => I''(t) = -A*B^2*sin(B*t + C)
 
 % Given the relationships,
-% U = -C*I' <=> U' = -C*I''
-% I = L*U' <=> I = -(L*C*I'') <=> 1/(-C*L) * I = I''
+% U = L(t)*I' <=> U' = L(t)*I''
+% I = -C*U' <=> I = -(L*C*I'') <=> 1/(-C*L) * I = I''
 
 % => 1/(-C*L) * A*sin(B*x + C) = -A*B^2*sin(B*t + C)
 % <=> -B^2 = 1/(-C*L)

@@ -14,12 +14,12 @@ function [Imax, T] = plif(x, y)
     Imax = 0;
    
     for i = 1:length(x)-1
-        k = (y(i) - y(i+1)) / (x(i) - x(i+1));
+        k = (y(i+1) - y(i)) / (x(i+1) - x(i));
         
         if Imax == 0 && (k < 0 || k == 0)
             Imax = y(i);
         elseif Imax ~= 0 && y(i) > 0 && y(i + 1) < 0
-            x_ = -(-y(i+1)/k + x(i+1)); % point-slope form
+            x_ = -y(i)/k + x(i); % point-slope form
             
             T = 2*x_;
             

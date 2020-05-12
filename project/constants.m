@@ -23,10 +23,14 @@ U0 = [220 1500 2300];
 % - Measure of the ability to store electrical charge.
 C = 0.5 * 10^(-6);
 
+% Unsecure values
+L_insec = @(I, L0) L0 * I0^2/(I0^2+I^2);
+F_insec = @(t, y, L0, C) [y(2)/L_insec(y(1), L0) y(1)/(-C)];
+
 % The relationship between current and voltage
 % y' = F(t, y), where y = [I(t) U(t)].
 % - U(t) = -C * I'(t)
 % - I(t) = L(I) * U'(t)
-F = @(t, y) [y(2)/L(y(1)) y(1)/(-C)];% = [I'(t); U'(t);] 
+F = @(t, y) F_insec(t, y, L0, C);% = [I'(t); U'(t);] 
 
-save numerical-analys/project/constants.mat L0 L I0 U0 C F;
+save numerical-analys/project/constants.mat L0 L I0 U0 C F L_unsec F_unsec;
