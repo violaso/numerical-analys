@@ -1,0 +1,30 @@
+Fråga:
+
+Om strömmen är nästan sinusformad bör alla koe?cienter utom den första vara mycket små. 
+Det symmetriska utseendet hos strömkurvan gör också att Fourierkoe?cienterna är noll för jämna k. 
+Kontrollera detta — stämmer teori och praktik?
+Visa koe?cienterna i en tabell med en kolumn per U0-värde.
+
+Utdata:
+
+U0 =
+
+         220        1500        2300
+
+
+a =
+
+    0.9968    0.8231    0.5428
+   -0.0005   -0.0006   -0.0007
+   -0.0031   -0.1395   -0.2269
+   -0.0002    0.0001    0.0005
+    0.0001    0.0293    0.1116
+   -0.0001   -0.0001   -0.0004
+    0.0000   -0.0063   -0.0568
+   -0.0001   -0.0000    0.0003
+    0.0000    0.0014    0.0294
+   -0.0001   -0.0000   -0.0002
+
+Slutsats:
+
+Det stämmer om mycket små tal antas vara 0. För högre jämt k, desto närmare noll.

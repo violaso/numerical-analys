@@ -4,11 +4,12 @@
 
 load constants.mat;
 
+% --- SHOW CONSTANT CAPACITANCE ---
+
 h = 1e-6
 p = 40
 
 tic;
-
 %calculate
 [x220, I220, U220] = rk4f(F, 220, p, h);
 [x1500, I1500, U1500] = rk4f(F, 1500, p, h);
