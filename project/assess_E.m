@@ -2,14 +2,17 @@
 % @author Jakob Carlsson
 % @version 2020-05-13
 
-load('constants.mat');
+load constants.mat;
 
-h = 0.000001
+h = 1e-6
+p = 40
+
+tic;
 
 %calculate
-[x220, I220, U220] = rk4f(F, 220, 2, h);
-[x1500, I1500, U1500] = rk4f(F, 1500, 2, h);
-[x2300, I2300, U2300] = rk4f(F, 2300, 2, h);
+[x220, I220, U220] = rk4f(F, 220, p, h);
+[x1500, I1500, U1500] = rk4f(F, 1500, p, h);
+[x2300, I2300, U2300] = rk4f(F, 2300, p, h);
 
 % pre-allocate
 E220 = x220;
@@ -28,7 +31,10 @@ for n=1:length(x2300)
     E2300(n) = (1/2)*C*U2300(n)^2 + (1/2)*L0*I0^2*log(I0^2 + I2300(n)^2);
 end
 
+toc
+
 plot(x220, E220)
 hold on;
 plot(x1500, E1500)
 plot(x2300, E2300)
+legend('220 V', '1500 V', '2300 V', 'Location', 'northeast');

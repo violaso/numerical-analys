@@ -1,2 +1,6 @@
 # matlab autosaves
 *.asv
+
+# pdflatex stuff
+*.aux
+*.log
