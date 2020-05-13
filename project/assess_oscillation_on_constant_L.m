@@ -4,7 +4,7 @@
 
 load constants.mat;
 
-% --- ASSESS OSCILLATING PERIOD ---
+% --- ASSESS OSCILLATION PERIOD ---
 
 % Seeking the frequency (fq) and period (p) of the circuit, where
 % fq = 1 / p

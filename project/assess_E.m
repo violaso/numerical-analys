@@ -4,6 +4,8 @@
 
 load('constants.mat');
 
+% --- SHOW CONSTANT CAPACITANCE ---
+
 h = 0.000001
 
 %calculate

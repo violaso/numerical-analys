@@ -36,6 +36,7 @@ disp('Series koefficients {a_k} for each U0:');
 U0
 a
 
+% Fourier serie
 function v = S(t, a)
     v = zeros(1, length(t));
     
@@ -48,6 +49,7 @@ function v = S(t, a)
     end
 end
 
+% Trapezoidal rule
 function I = T(h, k, t, v)
     f = @(i) v(i) * sin(k*t(i));
 
