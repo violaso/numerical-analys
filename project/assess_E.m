@@ -1,19 +1,10 @@
 % --- PROJEKT KRETSEN ---
 % @author Jakob Carlsson
-% @version 2020-05-12
+% @version 2020-05-13
 
-% set these in case we don't have them already
-L0 = 0.7;
-I0 = 1;
-C = 0.5 * 10^(-6);
+load('constants.mat');
 
-L = @(I) L0 * I0^2/(I0^2+I^2);
-F = @(t, y) [y(2)/L(y(1)) y(1)/(-C)]; % = [I'(t); U'(t);]
-
-
-
-h = 0.1
-
+h = 0.000001
 
 %calculate
 [x220, I220, U220] = rk4f(F, 220, 2, h);
