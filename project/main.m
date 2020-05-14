@@ -160,6 +160,9 @@ I_max = Imax
 
 % --- ASSESS VOLTAGE FOR FREQUENCY WITH INSECURE CONSTANTS ---
 
+disp('-----------------------')
+disp('Osäkerheten i modellen')
+
 L0_LOW = L0 * 0.95;
 L0_HIGH = L0 * 1.05;
 C_LOW = C * 0.95;
@@ -188,7 +191,18 @@ insec = [insec; U_ I_max];
 insec = [insec; U_ I_max];
 
 % Secure values
+disp('Dessa värden är korrekta:')
 [U_, I_max] = get_voltage(L0, C, F_insec)
+
+
+
+disp('Förklaring för kommande tabeller:')
+disp('-1 indikerar -5%')
+disp('1 indikerar +5%')
+disp('0 indikerar ordinarie värde')
+disp(' ')
+
+
 
 disp('[U_ I_max] relative to insecure parameters [L0 C]:');
 [insec param_values]
