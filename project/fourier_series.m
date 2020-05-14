@@ -13,11 +13,7 @@ a = [];
 
 for i = 1:length(U0)
     [t, v] = vf(U0(i), F, h);
-    
-    a_ = zeros(num_k, 1);
-    for k = 1:num_k
-       a_(k) = 1/pi * T(h, k, t, v);
-    end
+    [k, a_] = trf(t, v, num_k, h);
     
     a = [a a_];
     
