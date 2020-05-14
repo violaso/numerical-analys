@@ -8,11 +8,12 @@ load constants.mat;
 
 h = 0.000001;
 num_k = 10;
+num_p = 2;
 
 a = [];
 
 for i = 1:length(U0)
-    [t, v] = vf(U0(i), F, h);
+    [t, v] = vf(U0(i), F, h, num_p);
     [k, a_] = trf(t, v, num_k, h);
     
     a = [a a_];

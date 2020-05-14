@@ -12,7 +12,7 @@ num_k = 10;
 odd = 1:2:num_k;
 
 for i = 1:length(U0)
-    [t, v] = vf(U0(i), F, h);
+    [t, v] = vf(U0(i), F, h, 2);
     [k, a] = trf(t, v, num_k, h);
     
     semilogy(k(odd), abs(a(odd)));

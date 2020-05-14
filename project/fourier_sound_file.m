@@ -2,7 +2,6 @@
 % @author Viola Söderlund
 % @version 2020-05-11
 
-load constants.mat;
 load signals.mat;
 
 % --- GENERATE SOUND FILES ---

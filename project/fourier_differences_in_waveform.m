@@ -9,7 +9,7 @@ load constants.mat;
 h = 0.000001;
 
 for i = 1:length(U0)
-    [t, v] = vf(U0(i), F, h);
+    [t, v] = vf(U0(i), F, h, 2);
     
     plot(t, v);
     hold on;

@@ -17,7 +17,7 @@ function U = smf(xn_left, xn_right, F)
         xn_new = next_xn(xn_left, xn_right);
         approximation = get_period_f(xn_new, F);
    
-        if abs(approximation) <= eps || abs(last_approximation - approximation) <= eps
+        if approximation <= eps
             U = xn_new;
             break
         elseif approximation < 0
