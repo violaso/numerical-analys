@@ -1,0 +1,26 @@
+Filer att skicka in:
+
+report.pdf
+
+Bas:
+main.m
+constants.mat (se till att generera den igen, den buggar lite annars)
+plif.m
+rk4f.m
+smf.m
+get_period_f.m
+
+
+jag varierade saker i dessa för tillförlitlighetsbedömningen:
+assess_max_and_period.m
+assess_voltage_for_spec_frequency.m
+
+jag har även (lokalt) modifierat några filer för att lättare kunna göra tillförlitlighetsbedömningen:
+assess_voltage_for_spec_frequency.m
+smf.m
+get_period_f.m
+
+
+
+
+Utvidgning:

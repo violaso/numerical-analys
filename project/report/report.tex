@@ -8,6 +8,7 @@
 \usepackage{mathtools}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage[table,xcdraw]{xcolor} % för snyggare tabeller
 
 \setlength{\parindent}{0em}
 \setlength{\parskip}{1em}
@@ -128,18 +129,35 @@ Här används styckvis linjär interpolation.
 JAG FÖRSTÅR ÄRLIGT TALAT INTE HUR FUNKTIONEN FUNGERAR, SÅ JAG KAN INTE SKRIVA NÅGOT RIMLIGT HÄR ANNAT ÄN RESULTATEN.
 
 \begin{table}[H]
-\caption{Strömmens maxvärde I\textsubscript{max} och periodlängd T beroende på spänningen U\textsubscript{0}}
+\caption{Strömmens maxvärde I\textsubscript{max} och periodlängd T beroende på spänningen U\textsubscript{0}. Felet ligger alltid i sista decimalen, som kan vara fel på grund av avrundning.}
 \begin{center}
 \begin{tabular}{l|lll}
 \hline
-\textbf{U\textsubscript{0}}   & 220    & 1500   & 2300   \\
-\textbf{I\textsubscript{max}} & 0.1876 & 1.9971 & 6.5386 \\
-\textbf{T}    & 0.037  & 0.0030 & 0.0023
+\textbf{U\textsubscript{0}}   & 220    & 1500   & 2300   \\ \hline
+\textbf{I\textsubscript{max}} & 0.187553 & 1.997132 & 6.5386 \\
+\textbf{T}    & 0.03701  & 0.003019 & 0.002285
 \end{tabular}
 \end{center}
 \end{table}
 
-VI MÅSTE OCKSÅ GÖRA EN NUMERISK TILLFÖRLITLIGHETSBEDÖMNING HÄR.
+\begin{table}[H]
+\caption{Rådata för tillförlitlighetsbedömning, där $h=10^{-6}$}
+\begin{center}
+\begin{tabular}{l|ll}
+\hline
+{\color[HTML]{000000} \textbf{U\textsubscript{0}, h}}     & {\color[HTML]{000000} \textbf{I\textsubscript{max}}}   & {\color[HTML]{000000} \textbf{T}}        \\ \hline
+{\color[HTML]{000000} \textbf{220, h}}    & {\color[HTML]{000000} 0.187552548575790} & {\color[HTML]{000000} 0.003700568248926} \\
+{\color[HTML]{000000} \textbf{220, h/2}}  & {\color[HTML]{000000} 0.187552558040406} & {\color[HTML]{000000} 0.003701068248639} \\
+{\color[HTML]{000000} \textbf{220, h/4}}  & {\color[HTML]{000000} 0.187552570642913} & {\color[HTML]{000000} 0.003701068248619} \\ \hline
+{\color[HTML]{000000} \textbf{1500, h}}   & {\color[HTML]{000000} 1.997132052304110} & {\color[HTML]{000000} 0.003018680878398} \\
+{\color[HTML]{000000} \textbf{1500, h/2}} & {\color[HTML]{000000} 1.997132052303030} & {\color[HTML]{000000} 0.003019180878903} \\
+{\color[HTML]{000000} \textbf{1500, h/4}} & {\color[HTML]{000000} 1.997132298244580} & {\color[HTML]{000000} 0.003019180878994} \\ \hline
+{\color[HTML]{000000} \textbf{2300, h}}   & {\color[HTML]{000000} 6.538558656458210} & {\color[HTML]{000000} 0.002284745598040} \\
+{\color[HTML]{000000} \textbf{2300, h/2}} & {\color[HTML]{000000} 6.538608843205730} & {\color[HTML]{000000} 0.002285245599219} \\
+{\color[HTML]{000000} \textbf{2300, h/4}} & {\color[HTML]{000000} 6.538609292790240} & {\color[HTML]{000000} 0.002285245599511}
+\end{tabular}
+\end{center}
+\end{table}
 
 
 \section{Hitta spänningen U\textsubscript{0}\textsuperscript{*} för frekvensen 400 Hz}
@@ -152,9 +170,28 @@ Startgissningarna kommer från förra sektionen. Eftersom vi söker en frekvens 
 \end{gather*}
 så är dessa två värden på U\textsubscript{0} rimliga att använda som startgissningar.
 
-Detta ger oss värdet $U_0^* = 2069$ vilket ger ett maxvärde på strömmen $I_{max} = 4.5031$.
+Detta ger oss värdet $U_0^* = 2069$ vilket ger ett maxvärde på strömmen $I_{max}^* = 4.5031$. Alla siffror i dessa tal är korrekta.
 
-NUMERISK TILLFÖRLITLIGHETSBEDÖMNING
+\begin{table}[H]
+\caption{Rådata för tillförlitlighetsbedömning, olika steglängder och toleranser. $h = 10^{-6}$, eps $= 2.220446049250313*10^{-16}$ }
+\begin{center}
+\begin{tabular}{l|ll}
+\hline
+{\color[HTML]{000000} \textbf{h, tol}}     & {\color[HTML]{000000} \textbf{U\textsuperscript{*}\textsubscript{0}}}     & {\color[HTML]{000000} \textbf{I\textsuperscript{*}\textsubscript{max}}}  \\ \hline
+{\color[HTML]{000000} \textbf{h, 1e-10}}   & {\color[HTML]{000000} 2068.99484901206} & {\color[HTML]{000000} 4.50310419770553} \\
+{\color[HTML]{000000} \textbf{h, 1e-15}}   & {\color[HTML]{000000} 2068.99500936829} & {\color[HTML]{000000} 4.50310531749166} \\
+{\color[HTML]{000000} \textbf{h, eps}}     & {\color[HTML]{000000} 2068.99500936911} & {\color[HTML]{000000} 4.50310531749737} \\ \hline
+{\color[HTML]{000000} \textbf{h/2, 1e-10}} & {\color[HTML]{000000} 2068.99481404489} & {\color[HTML]{000000} 4.50310395344584} \\
+{\color[HTML]{000000} \textbf{h/2, 1e-15}} & {\color[HTML]{000000} 2068.99500936242} & {\color[HTML]{000000} 4.50310531737086} \\
+{\color[HTML]{000000} \textbf{h/2, eps}}   & {\color[HTML]{000000} 2068.99500936338} & {\color[HTML]{000000} 4.50310531737757} \\ \hline
+{\color[HTML]{000000} \textbf{h/4, 1e-10}} & {\color[HTML]{000000} 2068.99485072491} & {\color[HTML]{000000} 4.50310420958168} \\
+{\color[HTML]{000000} \textbf{h/4, 1e-15}} & {\color[HTML]{000000} 2068.99500936160} & {\color[HTML]{000000} 4.50310531736015} \\
+{\color[HTML]{000000} \textbf{h/4, eps}}   & {\color[HTML]{000000} 2068.99500936317} & {\color[HTML]{000000} 4.50310531737108}
+\end{tabular}
+\end{center}
+\end{table}
+
+
 
 
 \section{Osäkerhet i modellen}
