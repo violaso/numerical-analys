@@ -31,6 +31,4 @@ C = 0.5 * 10^(-6);
 F_insec = @(t, y, L0, C) [y(2)/L_insec(y(1), L0) y(1)/(-C)];
 F = @(t, y) F_insec(t, y, L0, C);% = [I'(t); U'(t);] 
 
-% - FOURIER ANALYSIS -
-
 save numerical-analys/project/constants.mat L0 L I0 U0 C F L_unsec F_unsec;

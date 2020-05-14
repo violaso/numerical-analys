@@ -11,7 +11,7 @@ function [t, v] = vf(U0, F, h)
 %  outputs:
 %   - t is the x-values of the output curve.
 %   - v is the y-values of the output curve.
-    num_p = 2;
+    num_p = 100;
     
     [x, I, U] = rk4f(F, U0, num_p, h);
     [Imax, T] = plif(x, I);
