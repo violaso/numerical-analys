@@ -1,0 +1,170 @@
+\documentclass[a4paper, titlepage, 11pt]{article}
+
+\usepackage[swedish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{fixltx2e} % inkl. t.ex. \textsubscript{}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{float}
+
+\setlength{\parindent}{0em}
+\setlength{\parskip}{1em}
+
+\title{Rapport för projekt: Kretsen}
+\author{Grupp: Kretsen 6 \\ \\
+Viola Söderlund \\ XXXXXX-XXXX \\ violaso@kth.se \\ \\
+Jakob Carlsson \\ XXXXXX-XXXX \\ jakobcar@kth.se}
+
+\begin{document}
+
+\maketitle
+
+\section{Frekvens och svängningstid med konstant L}
+
+OM VI SKA ÄNDRA PÅ RELATIONERNA SKA MAN VÄL GÖRA DET HÄR OCKSÅ. JAG TROR INTE ATT DET ÄNDRAR PÅ RESULTATET SÅ MYCKET SÅ DET BORDE VARA LUGNT.
+
+Vi vet att I(t) ska vara periodisk, vilket betyder att den kan skrivas på formen
+$$I(t) = A*\sin(B*t + D)$$
+
+Detta ger oss
+\begin{gather*}
+    I(t) = A*\sin(B*t + D) \\
+    \implies I'(t) = A*B*\cos(B*t + D) \\
+    \implies I''(t) = -A*B^2*\sin(B*t + D)
+\end{gather*}
+
+och givet relationerna (om L är konstant)
+\begin{gather}
+    U = L*I' \implies U' = L*I'' \\ % ej ekvivalens
+    I = -C*U' \iff I = -(L*C*I'') \iff \frac{1}{-C*L} * I = I''
+\end{gather}
+
+får vi att
+\begin{gather*}
+    \frac{1}{-C*L} * A*sin(B*t + D) = -A*B^2*sin(B*t + D) \\
+    \iff -B^2 = -\frac{1}{C*L} \\
+    \iff B = \sqrt{\frac{1}{C*L}}
+\end{gather*}
+
+Med $L = L_0 = 0.7$ och det givna värdet $C = 0.5*10^{-6}$ får man:
+
+\begin{gather*}
+    p = \frac{2\pi}{\sqrt{\frac{1}{C*L}}} \approx 0,0037 \\
+    fq = \frac{1}{p} \approx 269.0210
+\end{gather*}
+
+Dessa värden är exakta (till maskinnogrannheten) eftersom de räknades ut analytiskt och inte numeriskt. Detta hjälper oss att välja en rimlig intervallbredd senare, eftersom den ju bör vara (mycket) mindre än perioden p.
+
+
+\section{Plotter av strömkurvorna vid olika U\textsubscript{0}}
+Enligt projektbeskrivningen använder vi Runge-Kutta 4 för att räkna ut stömkurvorna givet tre olika värden på U\textsubscript{0}, nämligen 220 V, 1500 V och 2300 V.
+
+Med hjälp av resultatet i förra sektionen kan vi välja en rimlig steglängd h för metoden, t.ex.
+$h = 1*10^{-6}$.
+
+Vi definierar $y' = F(t, y)$ enligt:
+\begin{gather*}
+ y(t) = [U(t); I(t)] = [-C * I'(t); L(I) * U'(t)] \\
+ \implies y'(t) = [I'(t); U'(t)] = [U(t)/(-C); I(t)/L(I)] =: F(t, y)
+\end{gather*}
+
+Vilket ger strömkurvorna:
+
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{currents3.png}
+  \caption{Två perioder av strömkurvorna vid några olika U\textsubscript{0}}
+\end{figure}
+
+Startvärdena var alltså I\textsubscript{0} = 0 och tre olika U\textsubscript{0} enligt figuren.
+
+
+\section{Energin i spolen och kondensatorn}
+Den totala energin $E(t)$ i systemet ska vara konstant. Detta beror på att det är modellerat som ett slutet system. Om inte energin då är konstant skulle vi ju bryta mot termodynamikens första huvudsats.
+
+Utöver (1) och (2) från tidigare har vi också:
+\begin{gather}
+    L(I(t)) = L_0 * \frac{I_0^2}{I_0^2 + I(t)^2}
+\end{gather}
+
+Vi deriverar
+$$E(t) = \frac{1}{2}CU(t)^2 + \frac{1}{2}L_0*I_0^2*\ln(I_0^2 + I(t)^2)$$
+och visar med hjälp av sambanden att $E'(t) = 0 \implies E(t) =$ konstant.
+
+\begin{gather*}
+    E'(t) \\ = \\
+    C*U(t)*U'(t) \\
+    + \\
+    \frac{1}{2}*L_0*I_0^2 * \frac{I(t)I'(t)}{I_0^2 + I(t)^2} \\
+    = \\
+    C*U(t)*U'(t) \\
+    + \\
+    \frac{L_0*I_0^2}{I_0^2 + I(t)^2}*I(t)I'(t) \\
+    = \\
+    C*U(t)*U'(t) + L(I(t)) * I(t)I'(t) \\
+    = \\
+    -I(t)U(t) + U(t)I(t) = 0
+\end{gather*}
+
+Vi simulerar även E(t) över ett stort antal perioder ($p = 40$). Vi gör detta genom att köra Runge-Kutta som tidigare med dels samma steglängd $h_1 = 10^{-6}$, och dels med en större steglängd $h_2 = 10^{-4}$. Sedan applicerar vi bara formeln för E vektorvis över hela resultatet.
+
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{E-smallH.png}
+  \caption{E(t) över 40 perioder av I(t) med några olika U\textsubscript{0}, och med h = 10\textsuperscript{-6}}
+\end{figure}
+
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{E-bigH.png}
+  \caption{E(t) över 40 perioder av I(t) med några olika U\textsubscript{0}, och med h = 10\textsuperscript{-4}}
+\end{figure}
+
+Vi ser här att det är viktigt att ha en tillräckligt liten steglängd för att resultatet ska bli korrekt.
+
+
+\section{Strömmens toppvärde och periodtid}
+Här används styckvis linjär interpolation.
+
+JAG FÖRSTÅR ÄRLIGT TALAT INTE HUR FUNKTIONEN FUNGERAR, SÅ JAG KAN INTE SKRIVA NÅGOT RIMLIGT HÄR ANNAT ÄN RESULTATEN.
+
+\begin{table}[H]
+\caption{Strömmens maxvärde I\textsubscript{max} och periodlängd T beroende på spänningen U\textsubscript{0}}
+\begin{center}
+\begin{tabular}{l|lll}
+\hline
+\textbf{U\textsubscript{0}}   & 220    & 1500   & 2300   \\
+\textbf{I\textsubscript{max}} & 0.1876 & 1.9971 & 6.5386 \\
+\textbf{T}    & 0.037  & 0.0030 & 0.0023
+\end{tabular}
+\end{center}
+\end{table}
+
+VI MÅSTE OCKSÅ GÖRA EN NUMERISK TILLFÖRLITLIGHETSBEDÖMNING HÄR.
+
+
+\section{Hitta spänningen U\textsubscript{0}\textsuperscript{*} för frekvensen 400 Hz}
+Här använder vi sekantmetoden för att lösa ekvationen VAD ÄR EKVATIONEN??
+
+Startgissningarna kommer från förra sektionen. Eftersom vi söker en frekvens på 400 Hz, dvs. $T = \frac{1}{400} = 0.0025$, och vi hade
+\begin{gather*}
+    U_0 = 2300 \implies T = 0.0023 < 0.0025 \\
+    U_0 = 1500 \implies T = 0.0030 > 0.0025
+\end{gather*}
+så är dessa två värden på U\textsubscript{0} rimliga att använda som startgissningar.
+
+Detta ger oss värdet $U_0^* = 2069$ vilket ger ett maxvärde på strömmen $I_{max} = 4.5031$.
+
+NUMERISK TILLFÖRLITLIGHETSBEDÖMNING
+
+
+\section{Osäkerhet i modellen}
+JAG FÖRSTÅR INTE VAD DET ÄR JAG KOLLAR PÅ I OUTPUTEN.
+
+Jag tror att vi vill ha ett värde på ett största fel för de två värdena.
+
+
+
+\section{Egen arbetsinsats}
+
+
+\end{document}
