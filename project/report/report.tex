@@ -4,7 +4,6 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage[utf8]{inputenc}
-\usepackage{fixltx2e} % inkl. t.ex. \textsubscript{}
 \usepackage{mathtools}
 \usepackage{graphicx}
 \usepackage{float}
@@ -23,9 +22,6 @@ Jakob Carlsson \\ XXXXXX-XXXX \\ jakobcar@kth.se}
 \maketitle
 
 \section{Frekvens och svängningstid med konstant L}
-
-OM VI SKA ÄNDRA PÅ RELATIONERNA SKA MAN VÄL GÖRA DET HÄR OCKSÅ. JAG TROR INTE ATT DET ÄNDRAR PÅ RESULTATET SÅ MYCKET SÅ DET BORDE VARA LUGNT.
-
 Vi vet att I(t) ska vara periodisk, vilket betyder att den kan skrivas på formen
 $$I(t) = A*\sin(B*t + D)$$
 
@@ -65,6 +61,22 @@ Enligt projektbeskrivningen använder vi Runge-Kutta 4 för att räkna ut stömk
 Med hjälp av resultatet i förra sektionen kan vi välja en rimlig steglängd h för metoden, t.ex.
 $h = 1*10^{-6}$.
 
+
+Här stötte vi på ett problem. Relationerna givna i instruktionerna
+\begin{gather*}
+    U(t) = L(I) * I'(t) \\
+    I(t) = -C * U'(t)
+\end{gather*}
+divergerar.
+
+Om vi byter plats på -C och L, så får vi relationer som ger resultat som passar med hur de beskrivs i instruktionerna. På grund av detta använder vi dessa relationer istället. 
+\begin{gather*}
+    U(t) = -C * I'(t) \\
+    I(t) = L(I) * U'(t)
+\end{gather*}
+
+Se sektion 3 för vidare diskussion om detta.
+
 Vi definierar $y' = F(t, y)$ enligt:
 \begin{gather*}
  y(t) = [U(t); I(t)] = [-C * I'(t); L(I) * U'(t)] \\
@@ -92,7 +104,6 @@ Utöver (1) och (2) från tidigare har vi också:
 Vi deriverar
 $$E(t) = \frac{1}{2}CU(t)^2 + \frac{1}{2}L_0*I_0^2*\ln(I_0^2 + I(t)^2)$$
 och visar med hjälp av sambanden att $E'(t) = 0 \implies E(t) =$ konstant.
-
 \begin{gather*}
     E'(t) \\ = \\
     C*U(t)*U'(t) \\
@@ -122,6 +133,7 @@ Vi simulerar även E(t) över ett stort antal perioder ($p = 40$). Vi gör detta
 
 Vi ser här att det är viktigt att ha en tillräckligt liten steglängd för att resultatet ska bli korrekt.
 
+Något intressant här är att när vi visar analytiskt att E(t) är konstant använder vi relationerna som gavs i instruktionerna. När vi simulerar och visar på det sättet använder vi de modifierade relationerna som diskuterades i sektion 2.
 
 \section{Strömmens toppvärde och periodtid}
 Här används styckvis linjär interpolation.
@@ -170,7 +182,7 @@ Startgissningarna kommer från förra sektionen. Eftersom vi söker en frekvens 
 \end{gather*}
 så är dessa två värden på U\textsubscript{0} rimliga att använda som startgissningar.
 
-Detta ger oss värdet $U_0^* = 2069$ vilket ger ett maxvärde på strömmen $I_{max}^* = 4.5031$. Alla siffror i dessa tal är korrekta.
+Detta ger oss värdet $U_0^* = 2069$ vilket ger ett maxvärde på strömmen $I_{max}^* = 4.5031$. Alla siffror i dessa tal är korrekta. Mer specifikt är felet på $U_0^*$ i storleksordningen $10^{-3}$ och felet på $I_{max}^*$ är i storleksordningen $10^{-6}$.
 
 \begin{table}[H]
 \caption{Rådata för tillförlitlighetsbedömning, olika steglängder och toleranser. $h = 10^{-6}$, eps $= 2.220446049250313*10^{-16}$ }
@@ -192,16 +204,30 @@ Detta ger oss värdet $U_0^* = 2069$ vilket ger ett maxvärde på strömmen $I_{
 \end{table}
 
 
-
-
 \section{Osäkerhet i modellen}
-JAG FÖRSTÅR INTE VAD DET ÄR JAG KOLLAR PÅ I OUTPUTEN.
+Om man varierar L\textsubscript{0} och C vardera med $\pm5\%$ får man att största felet på $U_0^*$ är ungefär $140$ och det största felet på $I_{max}^*$ är ungefär $1.01$. Detta är betydligt större än de numeriska felen från förra sektionen.
 
-Jag tror att vi vill ha ett värde på ett största fel för de två värdena.
-
+\begin{table}[H]
+\caption{Rådata för felen i $U_0^*$ och $I_{max}^*$.}
+\begin{center}
+\begin{tabular}{l|ll}
+\hline
+\textbf{indatastörning, $5\% * [L_0, C]$} & \textbf{abs{[}felet i U*\textsubscript{0}{]}}         & \textbf{abs{[}felet i I*\textsubscript{max}{]}}     \\ \hline
+\textbf{-1, 0}          & {\color[HTML]{000000} 119.7911953379} & {\color[HTML]{000000} 0.4529453012} \\
+\textbf{1, 0}           & {\color[HTML]{000000} 116.9956676344} & {\color[HTML]{000000} 0.4777440246} \\
+\textbf{0, -1}          & {\color[HTML]{000000} 17.2015209153}  & {\color[HTML]{000000} 0.4529453012} \\
+\textbf{0, 1}           & {\color[HTML]{000000} 12.9008734915}  & {\color[HTML]{000000} 0.4777440246} \\
+\textbf{-1, -1}         & {\color[HTML]{000000} 140.1589962046} & {\color[HTML]{000000} 0.8617237602} \\
+\textbf{-1, 1}          & {\color[HTML]{000000} 104.1614611061} & {\color[HTML]{000000} 0.0232231367} \\
+\textbf{1, -1}          & {\color[HTML]{000000} 102.6631229215} & {\color[HTML]{000000} 0.0232231367} \\
+\textbf{1, 1}           & {\color[HTML]{000000} 127.4086699916} & {\color[HTML]{000000} 1.007785437} 
+\end{tabular}
+\end{center}
+\end{table}
 
 
 \section{Egen arbetsinsats}
+
 
 
 \end{document}
