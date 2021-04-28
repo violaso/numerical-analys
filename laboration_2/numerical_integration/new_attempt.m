@@ -1,25 +1,45 @@
-% -- LABORATION 2.2e, new attempt / alternate version --
+% --- LABORATION 2 ---
+% @author Jakob Carlsson & Viola Söderlund
+% @version 2020-04-25
 
+format long
+
+% 2. Numerisk integration
 
 h = [1, 0.5, 0.25, 0.125, 0.0625];
 f = @(x) sqrt(x+2);
-%f = @(x) x.^2;
+
+% a) Ritar grafen och ber�knar integralen analytiskt.
+
+disp('--- A. ---');
+
+figure('Name', 'a) Integralen av f i [-1, 1]', 'NumberTitle', 'off');
+fplot(f, [-1 1]);
 
 I = integral(f, -1, 1, 'RelTol', eps, 'AbsTol', eps)
 
-%x = logspace(-1, 0);
+% b, c, d) Approximerar integralen med trapetsregeln.
 
-%preallocate for speed because it told me to
-y_t = zeros(1,length(h));
+disp('--- B-D. ---');
+
+y_t = zeros(1, length(h));
 y_s = y_t;
+e_t = y_t;
+e_s = y_t;
 for i = 1:length(h) 
-    y_t(i) = abs(trapezoidal(f, h(i)) - I);
-    y_s(i) = abs(simpson(f, h(i)) - I);
+    y_t(i) = trapezoidal(f, h(i));
+    y_s(i) = simpson(f, h(i));
+    e_t(i) = abs(y_t(i) - I);
+    e_s(i) = abs(y_s(i) - I);
 end
 
-loglog(h, y_t, '-s');
+Th = [h; y_t; e_t]'
+Sh = [h; y_s; e_s]'
+
+figure('Name', 'e) Verifiera noggrannhetsordning', 'NumberTitle', 'off');
+loglog(h, e_t, '-s');
 hold on;
-    loglog(h, y_s, '-s');
+    loglog(h, e_s, '-s');
     loglog(h, h.^2, '-s');
     loglog(h, h.^4, '-s');
     
@@ -27,9 +47,10 @@ hold on;
     grid on;
 hold off;
 
-
-
-
+% -- Trapezoidal Rule --
+% Composite quadrature rule for approximtion of integrals.
+% S = f(0)/2 + sum f[1..(n-1)] + f(n)/2
+% I = S * dx
 function sum = trapezoidal(f, h)
     sum = f(-1) / 2;
 
@@ -40,6 +61,12 @@ function sum = trapezoidal(f, h)
     sum = (sum + f(1) / 2) * h;
 end
 
+% -- Simpson's Rule --
+% Composite Simpson's 1/3 rule.
+% S_even = sum f([2:2:n-2])
+% S_odd = sum f([1:2:n-1])
+% S = f(0) + 2*S_even + 4*S_odd + f(n)
+% I = S * dx/3
 function sum = simpson(f, h)
     n = 2 / h;
 
@@ -55,28 +82,3 @@ function sum = simpson(f, h)
     
     sum = (f(-1) + 4*odd_sum + 2*even_sum + f(1)) * h/3;
 end
-
-
-
-% function sum = simpson(f, h, lower_bound, upper_bound)
-%     %h = (upper_bound - lower_bound) / num_intervals;
-%     odd_sum = 0;
-%     even_sum = 0;
-%     for x_i = (lower_bound + h):h*2:(upper_bound - h)
-%         odd_sum = odd_sum + f(x_i);
-%         even_sum = even_sum + f(x_i + h);
-%     end
-%     
-%     sum = (f(lower_bound) + 4 * odd_sum + 2 * even_sum + f(upper_bound)) * h / 3;
-% end
-% 
-% function value = trapezoidal(f, h, lower_bound, upper_bound)
-%     %h = (upper_bound - lower_bound) / num_intervals;
-%     
-%     sum = 0;
-%     for x_i = (lower_bound + h):h:(upper_bound - h)
-%         sum = sum + f(x_i);
-%     end
-%     
-%     value = h * (f(lower_bound)/2 + sum + f(upper_bound)/2);
-% end

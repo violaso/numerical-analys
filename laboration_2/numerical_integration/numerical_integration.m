@@ -1,11 +1,6 @@
 % --- LABORATION 2 ---
-% @author Jakob Carlsson & Viola Söderlund
+% @author Jakob Carlsson & Viola Sï¿½derlund
 % @version 2020-04-25
-
-% clear
-
-clc;
-delete(findall(groot, 'Type', 'figure', 'FileName', []));
 
 % 3. Numerisk integration
 
@@ -13,7 +8,7 @@ f = @(x) sqrt(x + 2);
 f_d = @(x) 1 / (2 * sqrt(x + 2));
 f_d2 = @(x) -(1 / (4 * (x + 2) * sqrt(x + 2)));
 
-% a) Ritar grafen och beräknar integralen analytiskt.
+% a) Ritar grafen och berï¿½knar integralen analytiskt.
 
 disp('--- A. ---');
 
@@ -43,9 +38,9 @@ end
 
 results
 
-disp('Approximationen konvergerar när h -> 0.');
+disp('Approximationen konvergerar nï¿½r h -> 0.');
 
-% c) Undersöker felet
+% c) Undersï¿½ker felet
 
 disp('--- C. ---');
 
@@ -64,8 +59,8 @@ end
 
 results
 
-disp('Felet minskar ca. 4 gånger då h halveras.');
-disp('Teorin säger att felet överensstämmer med felet i styckvis linjär interpolation, vilket visar sig stämma.');
+disp('Felet minskar ca. 4 gï¿½nger dï¿½ h halveras.');
+disp('Teorin sï¿½ger att felet ï¿½verensstï¿½mmer med felet i styckvis linjï¿½r interpolation, vilket visar sig stï¿½mma.');
 
 % d) Approximerar integralen med Simpsons formel.
 
@@ -82,7 +77,7 @@ end
 
 results
 
-disp('Approximationen konvergerar när h -> 0.');
+disp('Approximationen konvergerar nï¿½r h -> 0.');
 
 % e) Plottar felet
 
@@ -107,7 +102,7 @@ hold off;
 disp('Approximationen visar att metoderna kan beskrivas med:');
 disp('-- Trapets: e(h) = O(h^2)');
 disp('-- Simpsons: e(h) = O(h^4)'); 
-% Notis: Eftersom f är fyra gånger deriverbar, borde funktionen ha
+% Notis: Eftersom f ï¿½r fyra gï¿½nger deriverbar, borde funktionen ha
 % noggrannhetsordning 4.
 
 function app_error = error(f, h)

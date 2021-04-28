@@ -3,10 +3,10 @@ clc;
 delete(findall(groot, 'Type', 'figure', 'FileName', []));
 
 % --- LABORATION 1 ---
-% @author Viola Söderlund
+% @author Viola SÃ¶derlund
 % @version 2020-03-22
 
-% 3. Olinjärt ekvationsystem
+% 3. OlinjÃ¤rt ekvationsystem
 
 A = struct('x', 93, 'y', 63, 'r', 55.1);
 B = struct('x', 6, 'y', 16, 'r', 46.2);

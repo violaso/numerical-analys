@@ -1,42 +1,63 @@
 % --- LABORATION 2.3 ---
-% @author Jakob Carlsson & Viola Söderlund
+% @author Jakob Carlsson & Viola SÃ¶derlund
 % @version 2020-04-17
 
-clear;
+format long
+
+% 3. Generator 2
 
 s = 2;
 beta = 1;
-denominator = n_denominator(s, beta);
-
 theta_bar = 40;
 
-% these are the numbers we're changing to get the correct time, remember n=1/h
-n_tra = 40;
-n_sim = 10;
+% a) BerÃ¤knar nÃ¤mnaren.
 
-tic;
+disp('--- A. ---');
+
+f = @(t) exp(-beta*t.^2);
+denominator = integral(f, -s, s, 'RelTol', eps, 'AbsTol', eps)
+
+% b, c) BerÃ¤knar tÃ¤ljaren och m.
+
+% these are the numbers we're changing to get the correct time, remember n=1/h
+n_tra = 70;
+n_sim = 70;
+
 m = @(t) max(generator(theta_bar + t, 0));
 f = @(t) exp(-beta*t^2)*m(t);
 
-% use one of these two following lines:
-%enumerator = calc_trapezoid(f, n_tra, -s, s);
-enumerator = simpson(f, n_tra, -s, s);
+disp('--- B. ---');
 
-m_bar = enumerator / denominator
-toc % there's a stray tic in generator.m that needs to be commented out for this to work
+tic;
+enumerator_t = trapezoid(f, n_tra, -s, s);
+numerator_t = enumerator_t
+m_bar_t = enumerator_t / denominator
+toc;
 
-% -- uppskatta felet --
+tic;
+enumerator_halfh_t = trapezoid(f, n_tra*2, -s, s);
+est_error_t = abs(enumerator_halfh_t - enumerator_t)
+toc;
 
-% use one of these two following lines:
-%enumerator_halfh = calc_trapezoid(f, n_tra*2, -s, s);
-enumerator_halfh = simpson(f, n_tra*2, -s, s);
+disp('--- C. ---');
 
-est_error = abs(enumerator_halfh - enumerator)
+tic;
+enumerator_s = simpson(f, n_sim, -s, s);
+numerator_s = enumerator_s
+m_bar_s = enumerator_s / denominator
+toc;
 
-% Jag copy-pasteade denna från
-% numerical_integration\numerical_integration.m
-% och modifierade lite
+tic;
+enumerator_halfh_s = simpson(f, n_sim*2, -s, s);
+est_error_s = abs(enumerator_halfh_s - enumerator_s)
+toc;
 
+% -- Simpson's Rule --
+% Composite Simpson's 1/3 rule.
+% S_even = sum f([2:2:n-2])
+% S_odd = sum f([1:2:n-1])
+% S = f(0) + 2*S_even + 4*S_odd + f(n)
+% I = S * dx/3
 function sum = simpson(f, num_intervals, lower_bound, upper_bound)
     h = (upper_bound - lower_bound) / num_intervals;
     
@@ -53,8 +74,11 @@ function sum = simpson(f, num_intervals, lower_bound, upper_bound)
     sum = (f(lower_bound) + 4*odd_sum + 2*even_sum + f(upper_bound)) * h/3;
 end
 
-% denna är också i princip en modifikation av den kopierade koden
-function value = calc_trapezoid(f, num_intervals, lower_bound, upper_bound)
+% -- Trapezoidal Rule --
+% Composite quadrature rule for approximtion of integrals.
+% S = f(0)/2 + sum f[1..(n-1)] + f(n)/2
+% I = S * dx
+function value = trapezoid(f, num_intervals, lower_bound, upper_bound)
     h = (upper_bound - lower_bound) / num_intervals;
     
     sum = 0;
@@ -63,10 +87,4 @@ function value = calc_trapezoid(f, num_intervals, lower_bound, upper_bound)
     end
     
     value = h * (f(lower_bound)/2 + sum + f(upper_bound)/2);
-end
-
-function value = n_denominator(s, beta)
-    f = @(t) exp(-beta*t.^2);
-    %value = simpson(f, 10000, -s, s); % second arg is the number of intervals
-    value = integral(f, -s, s, 'RelTol', eps, 'AbsTol', eps);
 end
